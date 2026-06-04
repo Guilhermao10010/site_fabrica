@@ -22,6 +22,12 @@
 
         html, body {
             height: 100%;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+        }
+        
+        ::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
         }
 
         body {
@@ -124,17 +130,65 @@
             align-items: center;
             gap: 5px;
             flex-shrink: 0;
+            transition: all 0.3s ease;
         }
 
         .menu-btn-line {
             display: block;
             height: 2px;
             background: var(--color-bg);
+            transition: all 0.3s ease;
         }
 
         .menu-btn-line:nth-child(1) { width: 23px; }
         .menu-btn-line:nth-child(2) { width: 16px; }
         .menu-btn-line:nth-child(3) { width: 24px; }
+
+        .menu-btn.open .menu-btn-line:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+            width: 24px;
+        }
+        .menu-btn.open .menu-btn-line:nth-child(2) {
+            opacity: 0;
+            width: 0;
+        }
+        .menu-btn.open .menu-btn-line:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+            width: 24px;
+        }
+
+        .nav-cta-text, .nav-cta-underline, .logo path {
+            transition: all 0.3s ease;
+        }
+
+        body.menu-open .nav-cta-text {
+            color: var(--color-bg);
+        }
+        body.menu-open .nav-cta-underline {
+            background: var(--color-bg);
+        }
+        body.menu-open .logo path[fill="#222852"] {
+            fill: var(--color-bg);
+        }
+
+        .mute-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--color-black);
+            opacity: 0.5;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        .mute-btn:hover {
+            opacity: 1;
+        }
+        body.menu-open .mute-btn {
+            color: var(--color-bg);
+        }
 
         /* ── Main ── */
         .site-main {
@@ -149,7 +203,7 @@
             display: flex;
             flex-direction: column;
             gap: 0;
-            transform: translate(-40px, 40px); /* Move mais para o canto inferior esquerdo */
+            transform: translate(-20px, 40px); /* Move mais para o canto inferior esquerdo, mas com margem */
         }
 
         .hero-tagline {
@@ -178,12 +232,13 @@
             align-items: center;
             gap: 6px; /* Mais perto da linha */
             flex-shrink: 0;
+            transform: translateY(10px) translateX(20px); /* Mais para cima e com margem na direita */
         }
 
         .scroll-label {
             font-family: var(--font-scroll);
             font-weight: 700;
-            font-size: clamp(11px, 1.1vw, 16px);
+            font-size: clamp(9px, 0.9vw, 13px); /* Reduzido ~20% */
             color: var(--color-black);
             writing-mode: vertical-rl;
             letter-spacing: 0.05em;
@@ -191,7 +246,7 @@
 
         .scroll-line {
             width: 2px;
-            height: 75px;
+            height: 60px; /* Reduzido ~20% */
             background: var(--color-black);
         }
 
@@ -312,21 +367,44 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            padding-left: 100px; /* Espaço para a linha lateral e os números */
+        }
+
+        .menu-links:hover a {
+            color: #000; /* As outras ficam pretas */
         }
 
         .menu-links a {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
             color: var(--color-bg);
             font-family: var(--font-heading);
             font-weight: 400;
             font-size: clamp(40px, 5vw, 60px);
             text-decoration: none;
             text-transform: uppercase;
-            transition: opacity 0.2s, transform 0.2s;
+            transition: color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .menu-links a::before {
+            content: attr(data-number);
+            position: absolute;
+            left: -40px;
+            font-size: clamp(14px, 2vw, 20px);
+            font-weight: 600;
+            opacity: 0;
+            color: var(--color-bg);
+            transition: opacity 0.3s ease;
         }
 
         .menu-links a:hover {
-            opacity: 0.8;
-            transform: translateX(10px);
+            color: var(--color-bg); /* O hover fica branco */
+            transform: translateX(20px);
+        }
+
+        .menu-links a:hover::before {
+            opacity: 1;
         }
 
         .menu-info {
@@ -503,53 +581,43 @@
             position: relative;
             z-index: 10;
             background-color: var(--color-bg);
-            padding: 100px 40px;
+            padding: 100px 0; /* Remove lateral padding so images can bleed */
             display: flex;
             flex-direction: column;
             gap: 100px;
             min-height: 100vh;
         }
 
-        .section-cta {
-            display: inline-flex;
-            background-color: var(--color-orange);
-            color: #FFF;
-            padding: 15px 30px;
-            font-family: var(--font-scroll);
-            font-weight: 700;
-            font-size: 20px;
-            text-transform: uppercase;
-            align-self: flex-start;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
+        
 
-        .section-cta:hover {
-            opacity: 0.8;
-        }
+        
 
         .feature-block {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 60px;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 30px;
+            flex-direction: column-reverse; /* Image on TOP, Text BELOW */
+            padding: 0 40px;
         }
 
         .feature-block.reverse {
-            flex-direction: row-reverse;
+            flex-direction: column-reverse; /* Image on TOP, Text BELOW */
+            padding: 0 40px;
         }
 
         .feature-content {
-            flex: 1;
             display: flex;
             flex-direction: column;
             gap: 20px;
-            max-width: 600px;
+            padding: 0;
+            max-width: 60%;
+            width: 100%;
         }
 
         .feature-content.right-align {
-            text-align: right;
-            align-items: flex-end;
+            text-align: left;
+            align-items: flex-start;
         }
 
         .feature-title {
@@ -577,11 +645,10 @@
         }
 
         .feature-image-placeholder {
-            flex: 1;
             height: 450px;
             background-color: #D9D9D9;
-            width: 100%;
-            max-width: 650px;
+            width: 60%;
+            max-width: 60%;
             transition: transform 0.3s ease;
         }
         
@@ -591,12 +658,21 @@
 
         @media (max-width: 900px) {
             .services-details-section {
-                padding: 60px 20px;
+                padding: 60px 0;
                 gap: 60px;
             }
             .feature-block, .feature-block.reverse {
-                flex-direction: column;
+                flex-direction: column-reverse; /* Image on TOP for mobile */
                 text-align: left;
+                padding: 0 20px;
+            }
+            .feature-content {
+                max-width: 100%;
+                padding: 0;
+            }
+            .feature-image-placeholder {
+                max-width: 100%;
+                width: 100%;
             }
             .feature-content.right-align {
                 text-align: left;
@@ -609,6 +685,29 @@
 
 
         /* ── Experience Section ── */
+        .experience-scroll-container {
+            position: relative;
+            z-index: 10;
+            height: 600vh; /* Smooth, long scroll locking */
+            background-color: var(--color-bg);
+        }
+
+        .experience-sticky {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            min-height: 800px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .experience-bg-text, .experience-info, .experience-image-placeholder {
+            transition: opacity 1.2s ease, transform 1.2s ease;
+        }
+
         .experience-section {
             position: relative;
             z-index: 10;
@@ -618,7 +717,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border-top: 1px solid rgba(0,0,0,0.05);
+            
         }
 
         .experience-bg-text {
@@ -789,7 +888,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            /* box-shadow removed */
         }
 
         .video-btn {
@@ -828,7 +927,7 @@
             position: relative;
             z-index: 10;
             background-color: var(--color-bg);
-            padding: 100px 40px;
+            padding: 100px 0; /* Remove lateral padding so images can bleed */
             display: flex;
             flex-direction: column;
             gap: 120px;
@@ -846,27 +945,29 @@
 
         .about-block {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 60px;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 30px;
+            flex-direction: column-reverse;
         }
 
         .about-block.reverse {
-            flex-direction: row-reverse;
+            flex-direction: column-reverse;
         }
 
         .about-content {
-            flex: 1;
             display: flex;
             flex-direction: column;
             gap: 20px;
-            max-width: 500px;
+            max-width: 60%;
+            width: 100%;
+            padding: 0;
         }
 
         .about-content.right-align {
-            text-align: right;
-            align-items: flex-end;
-            margin-left: auto;
+            text-align: left;
+            align-items: flex-start;
+            margin-left: 0;
         }
 
         .about-title {
@@ -886,11 +987,10 @@
         }
 
         .about-image-placeholder {
-            flex: 1;
             height: 450px;
             background-color: #D9D9D9;
-            width: 100%;
-            max-width: 650px;
+            width: 60%;
+            max-width: 60%;
             transition: transform 0.3s ease;
         }
         
@@ -915,8 +1015,13 @@
                 align-items: flex-start;
                 margin-left: 0;
             }
+            .about-content {
+                max-width: 100%;
+            }
             .about-image-placeholder {
                 height: 300px;
+                max-width: 100%;
+                width: 100%;
             }
         }
 
@@ -924,7 +1029,7 @@
         /* ── Contact Section ── */
         .contact-section {
             position: relative;
-            z-index: 10;
+            z-index: 100000;
             background-color: var(--color-bg);
             padding: 80px 40px;
             display: flex;
@@ -1032,6 +1137,99 @@
             }
         }
 
+
+        /* ── Custom Cursor ── */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: var(--color-orange);
+            color: #FFF;
+            padding: 15px 30px;
+            font-family: var(--font-scroll);
+            font-weight: 700;
+            font-size: 20px;
+            text-transform: uppercase;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+            transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+            white-space: nowrap;
+        }
+
+        .custom-cursor.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .custom-cursor.sound-cursor {
+            background-color: transparent !important;
+            color: var(--color-black) !important;
+            font-weight: 400 !important;
+            padding: 0 !important;
+            white-space: normal !important;
+            width: max-content !important;
+            text-align: center !important;
+            line-height: 1.2 !important;
+            text-transform: none !important;
+        }
+
+        .custom-cursor.active.sound-cursor {
+            transform: translate(-50%, 20px) scale(1);
+        }
+
+        .hero-sound-btn {
+            position: absolute;
+            top: 45%;
+            left: 10%;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid var(--color-blue);
+            color: var(--color-blue);
+            padding: 30px 60px;
+            border-radius: 0;
+            font-size: 36px;
+            font-weight: 700;
+            font-family: var(--font-scroll);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 20;
+            opacity: 0; /* Invisível mas ainda clicável */
+        }
+        .hero-sound-btn svg {
+            width: 48px;
+            height: 48px;
+            margin-right: 24px;
+        }
+        .hero-sound-btn:hover {
+            background: var(--color-blue);
+            color: #fff;
+        }
+
+        .services-details-section .feature-image-placeholder {
+            cursor: none;
+        }
+
+
+        /* ── Header Fixed Fix ── */
+        .site-header {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999 !important;
+            background: transparent;
+            pointer-events: none; /* Let clicks pass through empty spaces */
+        }
+        .site-header > * {
+            pointer-events: auto; /* Allow clicking logo and nav */
+        }
+        .video-placeholder {
+            cursor: none;
+        }
+    
     </style>
     <!-- Script do Spline Viewer -->
     <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.54/build/spline-viewer.js"></script>
@@ -1043,30 +1241,17 @@
             <path opacity="0.88" d="M0 1031C40.108 499.301 224.43 258.022 770.5 0" stroke="#EFEFEE"/>
         </svg>
 
-        <div class="menu-overlay-header">
-            <span class="menu-text-vertical">MENU</span>
-            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 30px;">
-                <a href="#" class="venha-conhecer-menu">
-                    VENHA NOS CONHECER
-                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="30" cy="30" r="30" fill="#D9D9D9"/>
-                        <path d="M22 30h16m-6-6l6 6-6 6" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </a>
-                <button class="close-btn" id="closeMenuBtn" aria-label="Fechar menu">
-                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10 10L30 30M30 10L10 30" stroke="#EFEFEF" stroke-width="3" stroke-linecap="round"/>
-                    </svg>
-                </button>
-            </div>
+        <div class="menu-side-container" style="position: absolute; left: 40px; top: 60px; display: flex; flex-direction: column; align-items: center; gap: 20px; z-index: 10;">
+            <div class="menu-text-vertical" style="font-size: 14px; letter-spacing: 0.1em; writing-mode: vertical-rl; transform: rotate(180deg);">MENU</div>
+            <div class="menu-side-line" style="width: 2px; height: 80px; background-color: var(--color-bg);"></div>
         </div>
 
         <div class="menu-content">
             <nav class="menu-links">
-                <a href="#">SOLUÇÕES</a>
-                <a href="#">PROJETOS</a>
-                <a href="#">SOBRE NÓS</a>
-                <a href="#">Contato</a>
+                <a href="#" data-number="01">SOLUÇÕES</a>
+                <a href="#" data-number="02">PROJETOS</a>
+                <a href="#" data-number="03">SOBRE NÓS</a>
+                <a href="#" data-number="04">CONTATO</a>
             </nav>
             <div class="menu-info">
                 <div class="contact-details">
@@ -1112,6 +1297,129 @@
     
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            // Custom Cursor Logic
+            const cursor = document.getElementById('customCursor');
+            const serviceImages = document.querySelectorAll('.services-details-section .feature-image-placeholder');
+            const videoPlaceholders = document.querySelectorAll('.video-placeholder');
+            const heroWrapper = document.querySelector('.hero-wrapper');
+            const muteBtn = document.getElementById('muteBtn');
+            const heroSoundBtn = document.getElementById('heroSoundBtn');
+            let soundEnabled = false;
+
+            // Inicia o áudio
+            const bgMusic = new Audio('musica.mp3');
+            bgMusic.volume = 0.02;
+            bgMusic.playbackRate = 0.7;
+            bgMusic.loop = true;
+
+            if(cursor) {
+                // Remove conteúdo apenas após a transição CSS terminar
+                const cleanupCursor = () => {
+                    setTimeout(() => {
+                        if (!cursor.classList.contains('active')) {
+                            cursor.innerHTML = "";
+                            cursor.textContent = "";
+                            cursor.classList.remove('sound-cursor');
+                            cursor.style.fontSize = "";
+                        }
+                    }, 200);
+                };
+
+                document.addEventListener('mousemove', (e) => {
+                    cursor.style.left = e.clientX + 'px';
+                    cursor.style.top = e.clientY + 'px';
+                });
+
+                if (heroSoundBtn) {
+                    heroSoundBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (!soundEnabled) {
+                            soundEnabled = true;
+                            bgMusic.play().catch(err => console.error("Erro ao tocar áudio:", err));
+                            cursor.classList.remove('active');
+                            cleanupCursor();
+                            if (muteBtn) muteBtn.style.display = 'flex';
+                            heroSoundBtn.style.display = 'none';
+                        }
+                    });
+                }
+
+                if (heroWrapper) {
+                    heroWrapper.addEventListener('mouseenter', () => {
+                        if (!soundEnabled) {
+                            cursor.innerHTML = "Clique em empresas<br>para abilitar o som";
+                            cursor.style.fontSize = "12px";
+                            cursor.classList.add('sound-cursor');
+                            cursor.classList.add('active');
+                        }
+                    });
+                    heroWrapper.addEventListener('mouseleave', () => {
+                        cursor.classList.remove('active');
+                        cleanupCursor();
+                    });
+                    heroWrapper.addEventListener('click', () => {
+                        if (!soundEnabled) {
+                            soundEnabled = true;
+                            bgMusic.play().catch(err => console.error("Erro ao tocar áudio:", err));
+                            cursor.classList.remove('active');
+                            cleanupCursor();
+                            if (muteBtn) muteBtn.style.display = 'flex';
+                            if (heroSoundBtn) heroSoundBtn.style.display = 'none';
+                        }
+                    });
+                }
+
+                if (muteBtn) {
+                    muteBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        soundEnabled = false;
+                        muteBtn.style.display = 'none';
+                        bgMusic.pause();
+                        if (heroSoundBtn) heroSoundBtn.style.display = 'flex';
+                    });
+                }
+
+                const scrollProgressBar = document.getElementById('scrollProgressBar');
+                window.addEventListener('scroll', () => {
+                    const scrollPx = document.documentElement.scrollTop || document.body.scrollTop;
+                    const winHeightPx = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                    const scrolled = `${(scrollPx / winHeightPx) * 100}%`;
+                    if(scrollProgressBar) {
+                        scrollProgressBar.style.height = scrolled;
+                    }
+                });
+
+                serviceImages.forEach(img => {
+                    img.addEventListener('mouseenter', (e) => {
+                        cursor.textContent = "COMO FUNCIONA";
+                        cursor.style.fontSize = "";
+                        cursor.classList.remove('sound-cursor');
+                        cursor.classList.add('active');
+                        cursor.style.left = e.clientX + 'px';
+                        cursor.style.top = e.clientY + 'px';
+                    });
+                    img.addEventListener('mouseleave', () => {
+                        cursor.classList.remove('active');
+                        cleanupCursor();
+                    });
+                });
+
+                videoPlaceholders.forEach(img => {
+                    img.addEventListener('mouseenter', (e) => {
+                        cursor.textContent = "ASSISTA O VÍDEO";
+                        cursor.style.fontSize = "";
+                        cursor.classList.remove('sound-cursor');
+                        cursor.classList.add('active');
+                        cursor.style.left = e.clientX + 'px';
+                        cursor.style.top = e.clientY + 'px';
+                    });
+                    img.addEventListener('mouseleave', () => {
+                        cursor.classList.remove('active');
+                        cleanupCursor();
+                    });
+                });
+            }
+
             const viewer = document.getElementById("my-spline");
             const baseUrl = "https://prod.spline.design/5dwVYLACMauo6Eyk/scene.splinecode";
             
@@ -1133,7 +1441,6 @@
         });
     </script>
 
-    <div class="hero-wrapper">
     <header class="site-header">
         <!-- Logo -->
         <svg class="logo" width="115" height="60" viewBox="0 0 164 86" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Fábrica de Empresas logo">
@@ -1150,6 +1457,13 @@
         </svg>
 
         <nav class="header-nav">
+            <button id="muteBtn" class="mute-btn" style="display: none;" aria-label="Desabilitar som">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <line x1="23" y1="9" x2="17" y2="15"></line>
+                    <line x1="17" y1="9" x2="23" y2="15"></line>
+                </svg>
+            </button>
             <a href="#" class="nav-cta">
                 <span class="nav-cta-text">VENHA NOS CONHECER</span>
                 <span class="nav-cta-underline"></span>
@@ -1163,7 +1477,16 @@
         </nav>
     </header>
 
-    <main class="site-main">
+    <div class="hero-wrapper">
+        <button id="heroSoundBtn" class="hero-sound-btn" aria-label="Ativar Som">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            ATIVAR SOM
+        </button>
+
+        <main class="site-main">
         <div class="hero-text">
             <h1 class="hero-tagline">TIRAMOS SUA IDEIA DO PAPEL</h1>
             <p class="hero-subtitle">COLOCAMOS SEU NEGÓCIO EM OPERAÇÃO</p>
@@ -1217,7 +1540,7 @@
 
     
     <section class="services-details-section">
-        <div class="section-cta">COMO FUNCIONA</div>
+        
 
         <!-- Block 1: Desenvolvimento Web -->
         <div class="feature-block">
@@ -1274,71 +1597,55 @@
     
     <section class="video-section">
         <div class="video-placeholder">
-            <a href="#" class="video-btn">ASSISTA O VÍDEO</a>
+            
         </div>
     </section>
-    
-    <section class="experience-section">
-        <span class="experience-bg-text">ROBÓTICA</span>
-        
-        <div class="experience-content">
-            <div class="experience-title">NOSSA EXPERIÊNCIA</div>
+    <section class="experience-scroll-container">
+        <div class="experience-sticky">
+
             
-            <div class="experience-image-placeholder"></div>
-            
-            <div class="experience-info">
-                <p class="experience-desc">Campeões nacionais da F1 in Schools e premiados no mundial em Singapura. Uma base forjada na precisão e alta performance das competições de robótica.</p>
-                <a href="#" class="experience-link">Veja nossa história completa</a>
-            </div>
-            
-            <div class="scroll-indicator" style="position: absolute; right: 40px; bottom: 40px;" aria-label="Role para baixo">
-                <span class="scroll-label">DESÇA</span>
-                <div class="scroll-line"></div>
-            </div>
-        </div>
-    </section>
-    
-    
-    <section class="experience-section">
-        <span class="experience-bg-text">NEGÓCIOS</span>
-        
-        <div class="experience-content">
-            <div class="experience-title">NOSSA EXPERIÊNCIA</div>
-            
-            <div class="experience-image-placeholder"></div>
-            
-            <div class="experience-info">
-                <p class="experience-desc">Lideramos operações reais em tecnologia, IA e seguros. Sabemos exatamente o que o seu projeto precisa porque estruturamos e escalamos negócios na prática.</p>
-                <a href="#" class="experience-link">Veja nossa história completa</a>
-            </div>
-            
-            <div class="scroll-indicator" style="position: absolute; right: 40px; bottom: 40px;" aria-label="Role para baixo">
-                <span class="scroll-label">DESÇA</span>
-                <div class="scroll-line"></div>
+            <div class="experience-content">
+            <!-- Background Texts -->
+            <span class="experience-bg-text" id="exp-bg-1">ROBÓTICA</span>
+            <span class="experience-bg-text" id="exp-bg-2" style="opacity: 0;">NEGÓCIOS</span>
+            <span class="experience-bg-text" id="exp-bg-3" style="opacity: 0;">FORMAÇÃO</span>
+                <div class="experience-title" style="z-index: 4; position: absolute; top: 120px; left: 105px;">NOSSA EXPERIÊNCIA</div>
+                
+                <!-- Images -->
+                <div class="experience-image-placeholder" id="exp-img-1" style="z-index: 2;"></div>
+                <div class="experience-image-placeholder" id="exp-img-2" style="z-index: 2; opacity: 0; transform: translate(-60%, -50%) rotate(-40deg) scale(0.95);"></div>
+                <div class="experience-image-placeholder" id="exp-img-3" style="z-index: 2; opacity: 0; transform: translate(-60%, -50%) rotate(-50deg) scale(0.95);"></div>
+                
+                <!-- Info Blocks -->
+                <div class="experience-info" id="exp-info-1">
+                    <p class="experience-desc">Campeões nacionais da F1 in Schools e premiados no mundial em Singapura. Uma base forjada na precisão e alta performance das competições de robótica.</p>
+                    <a href="#" class="experience-link">Veja nossa história completa</a>
+                </div>
+                <div class="experience-info" id="exp-info-2" style="opacity: 0; pointer-events: none;">
+                    <p class="experience-desc">Lideramos operações reais em tecnologia, IA e seguros. Sabemos exatamente o que o seu projeto precisa porque estruturamos e escalamos negócios na prática.</p>
+                    <a href="#" class="experience-link">Veja nossa história completa</a>
+                </div>
+                <div class="experience-info" id="exp-info-3" style="opacity: 0; pointer-events: none;">
+                    <p class="experience-desc">Aliamos o raciocínio lógico da Engenharia ao desenvolvimento web avançado, construindo ecossistemas digitais com tecnologias modernas como React, TypeScript e Inteligência Artificial.</p>
+                    <a href="#" class="experience-link">Veja nossa história completa</a>
+                </div>
+                
+                <div class="scroll-indicator" style="position: absolute; right: 40px; bottom: 40px; z-index: 4;" aria-label="Role para baixo">
+                    <span class="scroll-label">DESÇA</span>
+                    <div class="scroll-line"></div>
+                </div>
             </div>
         </div>
     </section>
+
     
     
-    <section class="experience-section">
-        <span class="experience-bg-text">FORMAÇÃO</span>
-        
-        <div class="experience-content">
-            <div class="experience-title">NOSSA EXPERIÊNCIA</div>
-            
-            <div class="experience-image-placeholder"></div>
-            
-            <div class="experience-info">
-                <p class="experience-desc">Aliamos o raciocínio lógico da Engenharia ao desenvolvimento web avançado, construindo ecossistemas digitais com tecnologias modernas como React, TypeScript e Inteligência Artificial.</p>
-                <a href="#" class="experience-link">Veja nossa história completa</a>
-            </div>
-            
-            <div class="scroll-indicator" style="position: absolute; right: 40px; bottom: 40px;" aria-label="Role para baixo">
-                <span class="scroll-label">DESÇA</span>
-                <div class="scroll-line"></div>
-            </div>
-        </div>
-    </section>
+    
+    
+    
+    
+    
+    
     
     
     <section class="about-section">
@@ -1405,23 +1712,76 @@
         <div class="contact-image-placeholder"></div>
     </section>
     
+    <div class="custom-cursor" id="customCursor">COMO FUNCIONA</div>
+
+    <!-- Custom Scroll Progress Bar -->
+    <div class="scroll-progress-container" style="position: fixed; top: 0; right: 0; width: 6px; height: 100vh; background: rgba(0, 0, 0, 0.1); z-index: 99999; pointer-events: none;">
+        <div class="scroll-progress-bar" id="scrollProgressBar" style="width: 100%; height: 0%; background: var(--color-orange); transition: height 0.1s ease-out;"></div>
+    </div>
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const menuBtn = document.querySelector('.menu-btn');
-            const closeBtn = document.getElementById('closeMenuBtn');
             const menuOverlay = document.getElementById('menuOverlay');
 
-            if(menuBtn && closeBtn && menuOverlay) {
+            if(menuBtn && menuOverlay) {
                 menuBtn.addEventListener('click', () => {
-                    menuOverlay.classList.add('active');
-                    document.body.style.overflow = 'hidden'; // prevent scrolling underneath
-                });
-                closeBtn.addEventListener('click', () => {
-                    menuOverlay.classList.remove('active');
-                    document.body.style.overflow = '';
+                    menuOverlay.classList.toggle('active');
+                    menuBtn.classList.toggle('open');
+                    document.body.classList.toggle('menu-open');
+                    
+                    if (menuOverlay.classList.contains('active')) {
+                        document.body.style.overflow = 'hidden'; // prevent scrolling underneath
+                    } else {
+                        document.body.style.overflow = '';
+                    }
                 });
             }
-        });
+        
+            // Experience Scrolljacking Logic
+            const expContainer = document.querySelector('.experience-scroll-container');
+            if (expContainer) {
+                window.addEventListener('scroll', () => {
+                    const rect = expContainer.getBoundingClientRect();
+                    const windowHeight = window.innerHeight;
+                    
+                    let progress = 0;
+                    if (rect.top <= 0) {
+                        progress = Math.abs(rect.top) / (rect.height - windowHeight);
+                    }
+                    progress = Math.max(0, Math.min(1, progress));
+
+                    let activeIndex = 1;
+                    if (progress >= 0.33 && progress < 0.66) {
+                        activeIndex = 2;
+                    } else if (progress >= 0.66) {
+                        activeIndex = 3;
+                    }
+
+                    for(let i = 1; i <= 3; i++) {
+                        const bg = document.getElementById(`exp-bg-${i}`);
+                        const info = document.getElementById(`exp-info-${i}`);
+                        const img = document.getElementById(`exp-img-${i}`);
+                        
+                        const isActive = (i === activeIndex);
+                        
+                        if (bg) {
+                            bg.style.opacity = isActive ? '1' : '0';
+                            bg.style.transform = isActive ? 'translate(-50%, -50%) scale(1)' : 'translate(-50%, -50%) scale(0.95)';
+                        }
+                        if (info) {
+                            info.style.opacity = isActive ? '1' : '0';
+                            info.style.pointerEvents = isActive ? 'auto' : 'none';
+                            info.style.transform = isActive ? 'translateY(0)' : 'translateY(20px)';
+                        }
+                        if (img) {
+                            img.style.opacity = isActive ? '1' : '0';
+                            img.style.transform = isActive ? 'translate(-60%, -50%) rotate(-45deg) scale(1)' : 'translate(-60%, -50%) rotate(-40deg) scale(0.95)';
+                        }
+                    }
+                });
+            }
+});
     </script>
     
 </body>
