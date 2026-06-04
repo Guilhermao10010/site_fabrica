@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fábrica de Empresas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --color-bg: #EFEFEE;
+            --color-blue: #222852;
+            --color-orange: #EE731B;
+            --color-black: #000;
+            --color-menu-btn: #595959;
+            --font-heading: 'Oswald', -apple-system, Roboto, Helvetica, sans-serif;
+            --font-scroll: 'Poppins', -apple-system, Roboto, Helvetica, sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            background: var(--color-bg);
+            font-family: var(--font-heading);
+            position: relative;
+        }
+
+        .hero-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+        }
+
+        .spline-container {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        /* Oculta a logo do Spline Viewer */
+        spline-viewer::part(logo) {
+            display: none !important;
+        }
+
+        /* Sobreposição para cobrir a logo na força bruta */
+        .spline-watermark-hider {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 180px;
+            height: 60px;
+            background-color: var(--color-bg);
+            z-index: 99999;
+            pointer-events: none; /* Para não bloquear cliques acidentais */
+        }
+
+        .site-header, .site-main {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ── Header ── */
+        .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 20px 40px 0;
+        }
+
+        .logo {
+            display: block;
+            flex-shrink: 0;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-cta {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            text-decoration: none;
+        }
+
+        .nav-cta-text {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: clamp(13px, 1.4vw, 21px);
+            color: var(--color-black);
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+
+        .nav-cta-underline {
+            height: 2px;
+            background: var(--color-black);
+            width: 100%;
+        }
+
+        .menu-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--color-menu-btn);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        .menu-btn-line {
+            display: block;
+            height: 2px;
+            background: var(--color-bg);
+        }
+
+        .menu-btn-line:nth-child(1) { width: 23px; }
+        .menu-btn-line:nth-child(2) { width: 16px; }
+        .menu-btn-line:nth-child(3) { width: 24px; }
+
+        /* ── Main ── */
+        .site-main {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0 40px 60px;
+        }
+
+        .hero-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            transform: translate(-40px, 40px); /* Move mais para o canto inferior esquerdo */
+        }
+
+        .hero-tagline {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: clamp(17px, 1.7vw, 24px);
+            line-height: 1.3;
+        }
+
+        .hero-tagline .word-fabrica { color: var(--color-blue); }
+        .hero-tagline .word-de      { color: var(--color-orange); }
+        .hero-tagline .word-empresas{ color: var(--color-blue); }
+
+        .hero-subtitle {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: clamp(17px, 1.7vw, 24px);
+            color: var(--color-black);
+            line-height: 1.3;
+        }
+
+        /* ── Scroll indicator ── */
+        .scroll-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px; /* Mais perto da linha */
+            flex-shrink: 0;
+        }
+
+        .scroll-label {
+            font-family: var(--font-scroll);
+            font-weight: 700;
+            font-size: clamp(11px, 1.1vw, 16px);
+            color: var(--color-black);
+            writing-mode: vertical-rl;
+            letter-spacing: 0.05em;
+        }
+
+        .scroll-line {
+            width: 2px;
+            height: 75px;
+            background: var(--color-black);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .site-header {
+                padding: 16px 20px 0;
+            }
+
+            .menu-btn {
+                width: 44px;
+                height: 44px;
+                gap: 5px;
+            }
+
+            .menu-btn-line:nth-child(1) { width: 24px; }
+            .menu-btn-line:nth-child(2) { width: 17px; }
+            .menu-btn-line:nth-child(3) { width: 26px; }
+
+            .site-main {
+                padding: 0 20px 40px;
+            }
+
+            .scroll-line {
+                height: 50px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-cta-text {
+                font-size: 14px;
+            }
+
+            .hero-tagline,
+            .hero-subtitle {
+                font-size: 24px;
+            }
+        }
+
+        /* ── Menu Overlay ── */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #212853;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            transform: translateY(-100%);
+            transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .menu-overlay.active {
+            transform: translateY(0);
+        }
+
+        .menu-bg-line {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: auto;
+            pointer-events: none;
+            opacity: 0.88;
+            z-index: 0;
+        }
+
+        .menu-overlay-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .menu-text-vertical {
+            color: var(--color-bg);
+            font-family: var(--font-scroll);
+            font-weight: 700;
+            font-size: 30px;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        .menu-content {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            gap: 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .menu-links a {
+            color: var(--color-bg);
+            font-family: var(--font-heading);
+            font-weight: 400;
+            font-size: clamp(40px, 5vw, 60px);
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .menu-links a:hover {
+            opacity: 0.8;
+            transform: translateX(10px);
+        }
+
+        .menu-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
+            max-width: 500px;
+            gap: 30px;
+        }
+
+        .venha-conhecer-menu {
+            color: var(--color-bg);
+            font-family: var(--font-heading);
+            font-size: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: opacity 0.2s;
+        }
+        
+        .venha-conhecer-menu:hover {
+            opacity: 0.8;
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-family: var(--font-scroll);
+            font-weight: 600;
+            font-size: clamp(20px, 2.5vw, 35px);
+        }
+
+        .contact-email {
+            color: var(--color-orange);
+            text-decoration: underline;
+        }
+
+        .contact-phone {
+            color: var(--color-orange);
+        }
+
+        .contact-address {
+            color: var(--color-bg);
+        }
+
+        .social-icons-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icon {
+            width: 42px;
+            height: 42px;
+            transition: transform 0.2s;
+        }
+
+        .social-icon:hover {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .menu-overlay {
+                padding: 20px;
+            }
+            .menu-content {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-top: 20px;
+            }
+            .menu-info {
+                align-items: flex-start;
+                text-align: left;
+            }
+            .venha-conhecer-menu {
+                flex-direction: row-reverse;
+                align-self: flex-start;
+            }
+            .menu-bg-line {
+                display: none;
+            }
+        }
+
+
+        /* ── Services Section ── */
+        .services-section {
+            position: relative;
+            z-index: 10;
+            background-color: var(--color-bg);
+            padding: 120px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 60px;
+            min-height: 100vh;
+        }
+
+        .services-title {
+            flex: 1;
+            font-size: clamp(30px, 4vw, 55px);
+            font-weight: 700;
+            max-width: 550px;
+            line-height: 1.2;
+            color: var(--color-black);
+            font-family: var(--font-scroll);
+        }
+
+        .services-list {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            max-width: 650px;
+            width: 100%;
+        }
+
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+            padding-bottom: 20px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .service-item:hover {
+            opacity: 0.7;
+            transform: translateX(10px);
+        }
+
+        .service-name {
+            font-size: clamp(24px, 3vw, 40px);
+            font-weight: 600;
+            color: var(--color-black);
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+        }
+
+        .service-icon {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .service-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: var(--color-black);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        @media (max-width: 900px) {
+            .services-section {
+                flex-direction: column;
+                padding: 80px 20px;
+                gap: 40px;
+            }
+        }
+
+
+        /* ── Services Details Section ── */
+        .services-details-section {
+            position: relative;
+            z-index: 10;
+            background-color: var(--color-bg);
+            padding: 100px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 100px;
+            min-height: 100vh;
+        }
+
+        .section-cta {
+            display: inline-flex;
+            background-color: var(--color-orange);
+            color: #FFF;
+            padding: 15px 30px;
+            font-family: var(--font-scroll);
+            font-weight: 700;
+            font-size: 20px;
+            text-transform: uppercase;
+            align-self: flex-start;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .section-cta:hover {
+            opacity: 0.8;
+        }
+
+        .feature-block {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+        }
+
+        .feature-block.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .feature-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 600px;
+        }
+
+        .feature-content.right-align {
+            text-align: right;
+            align-items: flex-end;
+        }
+
+        .feature-title {
+            font-size: clamp(28px, 4vw, 45px);
+            font-weight: 600;
+            color: var(--color-black);
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+
+        .feature-desc {
+            font-size: clamp(16px, 1.5vw, 18px);
+            font-weight: 400;
+            color: var(--color-black);
+            font-family: var(--font-scroll);
+            line-height: 1.6;
+        }
+
+        .feature-tags {
+            font-size: clamp(14px, 1.2vw, 16px);
+            font-weight: 400;
+            color: rgba(0, 0, 0, 0.4);
+            font-family: var(--font-scroll);
+        }
+
+        .feature-image-placeholder {
+            flex: 1;
+            height: 450px;
+            background-color: #D9D9D9;
+            width: 100%;
+            max-width: 650px;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-image-placeholder:hover {
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 900px) {
+            .services-details-section {
+                padding: 60px 20px;
+                gap: 60px;
+            }
+            .feature-block, .feature-block.reverse {
+                flex-direction: column;
+                text-align: left;
+            }
+            .feature-content.right-align {
+                text-align: left;
+                align-items: flex-start;
+            }
+            .feature-image-placeholder {
+                height: 300px;
+            }
+        }
+
+
+        /* ── Experience Section ── */
+        .experience-section {
+            position: relative;
+            z-index: 10;
+            background-color: var(--color-bg);
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .experience-bg-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-heading);
+            font-size: clamp(100px, 15vw, 300px);
+            font-weight: 600;
+            color: rgba(0, 0, 0, 0.03);
+            white-space: nowrap;
+            z-index: 1;
+            user-select: none;
+            letter-spacing: 0.05em;
+        }
+
+        .experience-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .experience-title {
+            position: absolute;
+            top: 120px;
+            left: 60px;
+            font-family: var(--font-scroll);
+            font-weight: 600;
+            font-size: clamp(24px, 3vw, 35px);
+            color: var(--color-black);
+            z-index: 3;
+        }
+
+        .experience-image-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-60%, -50%) rotate(-45deg);
+            width: clamp(300px, 60vw, 900px);
+            height: clamp(150px, 30vw, 350px);
+            background-color: #D9D9D9;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+            transition: transform 0.4s ease;
+            z-index: 2;
+        }
+        
+        .experience-image-placeholder:hover {
+            transform: translate(-60%, -50%) rotate(-40deg) scale(1.02);
+        }
+
+        .experience-info {
+            position: absolute;
+            bottom: 120px;
+            right: 120px;
+            max-width: 550px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            z-index: 3;
+        }
+
+        .experience-desc {
+            font-family: var(--font-scroll);
+            font-weight: 400;
+            font-size: clamp(16px, 1.5vw, 25px);
+            color: var(--color-black);
+            line-height: 1.5;
+        }
+
+        .experience-link {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            font-family: var(--font-scroll);
+            font-weight: 600;
+            font-size: clamp(16px, 1.2vw, 20px);
+            color: var(--color-black);
+            text-decoration: none;
+            padding-left: 24px;
+            transition: opacity 0.2s;
+            margin-top: 10px;
+        }
+
+        .experience-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            background-color: #D9D9D9;
+            border-radius: 50%;
+            z-index: -1;
+            transition: transform 0.2s;
+        }
+
+        .experience-link:hover::before {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        @media (max-width: 900px) {
+            .experience-content {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 80px 20px;
+                text-align: center;
+            }
+            .experience-title {
+                position: static;
+                margin-bottom: 60px;
+                align-self: flex-start;
+            }
+            .experience-image-placeholder {
+                position: relative;
+                top: auto;
+                left: auto;
+                transform: rotate(-15deg);
+                margin: 0 auto 60px;
+                width: 90%;
+                height: 200px;
+            }
+            .experience-image-placeholder:hover {
+                transform: rotate(-10deg) scale(1.02);
+            }
+            .experience-info {
+                position: static;
+                text-align: left;
+                align-self: flex-end;
+                right: auto;
+                bottom: auto;
+            }
+            .experience-bg-text {
+                font-size: 100px;
+                transform: translate(-50%, -50%) rotate(-10deg);
+            }
+        }
+
+
+        /* ── Video Section ── */
+        .video-section {
+            position: relative;
+            z-index: 10;
+            background-color: var(--color-bg);
+            padding: 40px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-placeholder {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 80px); /* 100vh minus padding */
+            max-width: 1380px;
+            background-color: #D9D9D9;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        }
+
+        .video-btn {
+            background-color: var(--color-orange);
+            color: #FFF;
+            padding: 15px 35px;
+            font-family: var(--font-scroll);
+            font-weight: 700;
+            font-size: clamp(16px, 2vw, 20px);
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+            box-shadow: 0 10px 20px rgba(238, 115, 27, 0.3);
+            text-decoration: none;
+        }
+
+        .video-btn:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .video-section {
+                padding: 20px;
+            }
+            .video-placeholder {
+                height: 60vh;
+                border-radius: 12px;
+            }
+        }
+
+
+        /* ── About Section ── */
+        .about-section {
+            position: relative;
+            z-index: 10;
+            background-color: var(--color-bg);
+            padding: 100px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 120px;
+            min-height: 100vh;
+        }
+
+        .about-main-title {
+            font-size: clamp(30px, 4vw, 45px);
+            font-weight: 600;
+            color: var(--color-black);
+            font-family: var(--font-scroll);
+            margin-bottom: -60px;
+            text-transform: uppercase;
+        }
+
+        .about-block {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+        }
+
+        .about-block.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .about-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 500px;
+        }
+
+        .about-content.right-align {
+            text-align: right;
+            align-items: flex-end;
+            margin-left: auto;
+        }
+
+        .about-title {
+            font-size: clamp(28px, 4vw, 40px);
+            font-weight: 600;
+            color: var(--color-black);
+            font-family: var(--font-scroll);
+            text-transform: uppercase;
+        }
+
+        .about-desc {
+            font-size: clamp(16px, 1.5vw, 22px);
+            font-weight: 400;
+            color: var(--color-black);
+            font-family: var(--font-scroll);
+            line-height: 1.5;
+        }
+
+        .about-image-placeholder {
+            flex: 1;
+            height: 450px;
+            background-color: #D9D9D9;
+            width: 100%;
+            max-width: 650px;
+            transition: transform 0.3s ease;
+        }
+        
+        .about-image-placeholder:hover {
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 900px) {
+            .about-section {
+                padding: 60px 20px;
+                gap: 60px;
+            }
+            .about-main-title {
+                margin-bottom: 0;
+            }
+            .about-block, .about-block.reverse {
+                flex-direction: column;
+                text-align: left;
+            }
+            .about-content.right-align {
+                text-align: left;
+                align-items: flex-start;
+                margin-left: 0;
+            }
+            .about-image-placeholder {
+                height: 300px;
+            }
+        }
+
+
+        /* ── Contact Section ── */
+        .contact-section {
+            position: relative;
+            z-index: 10;
+            background-color: var(--color-bg);
+            padding: 80px 40px;
+            display: flex;
+            align-items: stretch;
+            justify-content: space-between;
+            gap: 60px;
+            min-height: 100vh;
+        }
+
+        .contact-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 600px;
+            padding: 40px 0;
+        }
+
+        .contact-title {
+            font-size: clamp(40px, 5vw, 60px);
+            font-weight: 700;
+            color: var(--color-black);
+            font-family: var(--font-scroll);
+            line-height: 1.1;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .contact-subtitle {
+            font-size: clamp(18px, 2.5vw, 30px);
+            font-weight: 400;
+            color: var(--color-black);
+            font-family: var(--font-scroll);
+            margin-bottom: 80px;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+
+        .form-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--color-black);
+            padding: 10px 0;
+            font-size: clamp(18px, 1.5vw, 24px);
+            font-family: var(--font-scroll);
+            color: var(--color-black);
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-input::placeholder {
+            color: rgba(0, 0, 0, 0.5);
+            font-weight: 400;
+        }
+
+        .form-input:focus {
+            border-bottom-color: var(--color-orange);
+        }
+
+        .submit-btn {
+            background-color: var(--color-orange);
+            color: #FFF;
+            padding: 15px 35px;
+            font-family: var(--font-scroll);
+            font-weight: 700;
+            font-size: 20px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+            align-self: flex-start;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        .contact-image-placeholder {
+            flex: 1;
+            background-color: #D9D9D9;
+            width: 100%;
+            max-width: 560px;
+            border-radius: 8px;
+            min-height: 600px;
+        }
+
+        @media (max-width: 900px) {
+            .contact-section {
+                flex-direction: column;
+                padding: 60px 20px;
+            }
+            .contact-image-placeholder {
+                min-height: 400px;
+                max-width: 100%;
+            }
+            .contact-subtitle {
+                margin-bottom: 40px;
+            }
+        }
+
+    </style>
+    <!-- Script do Spline Viewer -->
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.54/build/spline-viewer.js"></script>
+</head>
+<body>
+
+    <div class="menu-overlay" id="menuOverlay">
+        <svg class="menu-bg-line" viewBox="0 0 771 1031" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path opacity="0.88" d="M0 1031C40.108 499.301 224.43 258.022 770.5 0" stroke="#EFEFEE"/>
+        </svg>
+
+        <div class="menu-overlay-header">
+            <span class="menu-text-vertical">MENU</span>
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 30px;">
+                <a href="#" class="venha-conhecer-menu">
+                    VENHA NOS CONHECER
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="30" r="30" fill="#D9D9D9"/>
+                        <path d="M22 30h16m-6-6l6 6-6 6" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                <button class="close-btn" id="closeMenuBtn" aria-label="Fechar menu">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 10L30 30M30 10L10 30" stroke="#EFEFEF" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="menu-content">
+            <nav class="menu-links">
+                <a href="#">SOLUÇÕES</a>
+                <a href="#">PROJETOS</a>
+                <a href="#">SOBRE NÓS</a>
+                <a href="#">Contato</a>
+            </nav>
+            <div class="menu-info">
+                <div class="contact-details">
+                    <a href="mailto:teste@teste.com" class="contact-email">teste@ teste.com</a>
+                    <span class="contact-phone">62 99851-1232</span>
+                    <span class="contact-address">Rua Dona Maria<br>Rodrigues Ramos Qd 1A<br>Lt 23 Casa 2</span>
+                </div>
+                <div class="social-icons-container">
+                    <a href="#" class="social-icon">
+                        <svg viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 3.78164C26.6109 3.78164 27.2754 3.80625 29.482 3.90469C31.5328 3.99492 32.6402 4.33945 33.3785 4.62656C34.3547 5.00391 35.0602 5.46328 35.7902 6.19336C36.5285 6.93164 36.9797 7.62891 37.357 8.60508C37.6441 9.34336 37.9887 10.459 38.0789 12.5016C38.1773 14.7164 38.202 15.3809 38.202 20.9836C38.202 26.5945 38.1773 27.259 38.0789 29.4656C37.9887 31.5164 37.6441 32.6238 37.357 33.3621C36.9797 34.3383 36.5203 35.0438 35.7902 35.7738C35.052 36.5121 34.3547 36.9633 33.3785 37.3406C32.6402 37.6277 31.5246 37.9723 29.482 38.0625C27.2672 38.1609 26.6027 38.1855 21 38.1855C15.3891 38.1855 14.7246 38.1609 12.518 38.0625C10.4672 37.9723 9.35977 37.6277 8.62149 37.3406C7.64531 36.9633 6.93984 36.5039 6.20977 35.7738C5.47148 35.0355 5.02031 34.3383 4.64297 33.3621C4.35586 32.6238 4.01133 31.5082 3.92109 29.4656C3.82266 27.2508 3.79805 26.5863 3.79805 20.9836C3.79805 15.3727 3.82266 14.7082 3.92109 12.5016C4.01133 10.4508 4.35586 9.34336 4.64297 8.60508C5.02031 7.62891 5.47969 6.92344 6.20977 6.19336C6.94805 5.45508 7.64531 5.00391 8.62149 4.62656C9.35977 4.33945 10.4754 3.99492 12.518 3.90469C14.7246 3.80625 15.3891 3.78164 21 3.78164ZM21 0C15.2988 0 14.5852 0.0246094 12.3457 0.123047C10.1145 0.221484 8.58047 0.582422 7.25156 1.09922C5.86523 1.64062 4.69219 2.3543 3.52734 3.52734C2.3543 4.69219 1.64063 5.86524 1.09922 7.24336C0.582422 8.58047 0.221484 10.1062 0.123047 12.3375C0.0246094 14.5852 0 15.2988 0 21C0 26.7012 0.0246094 27.4148 0.123047 29.6543C0.221484 31.8855 0.582422 33.4195 1.09922 34.7484C1.64063 36.1348 2.3543 37.3078 3.52734 38.4727C4.69219 39.6375 5.86524 40.3594 7.24336 40.8926C8.58047 41.4094 10.1063 41.7703 12.3375 41.8687C14.577 41.9672 15.2906 41.9918 20.9918 41.9918C26.693 41.9918 27.4066 41.9672 29.6461 41.8687C31.8773 41.7703 33.4113 41.4094 34.7402 40.8926C36.1184 40.3594 37.2914 39.6375 38.4563 38.4727C39.6211 37.3078 40.343 36.1348 40.8762 34.7566C41.393 33.4195 41.7539 31.8938 41.8523 29.6625C41.9508 27.423 41.9754 26.7094 41.9754 21.0082C41.9754 15.307 41.9508 14.5934 41.8523 12.3539C41.7539 10.1227 41.393 8.58867 40.8762 7.25977C40.3594 5.86523 39.6457 4.69219 38.4727 3.52734C37.3078 2.3625 36.1348 1.64062 34.7566 1.10742C33.4195 0.590625 31.8938 0.229688 29.6625 0.13125C27.4148 0.0246094 26.7012 0 21 0Z" fill="white"/>
+                            <path d="M21 10.2129C15.0445 10.2129 10.2129 15.0445 10.2129 21C10.2129 26.9555 15.0445 31.7871 21 31.7871C26.9555 31.7871 31.7871 26.9555 31.7871 21C31.7871 15.0445 26.9555 10.2129 21 10.2129ZM21 27.9973C17.1363 27.9973 14.0027 24.8637 14.0027 21C14.0027 17.1363 17.1363 14.0027 21 14.0027C24.8637 14.0027 27.9973 17.1363 27.9973 21C27.9973 24.8637 24.8637 27.9973 21 27.9973Z" fill="white"/>
+                            <path d="M34.732 9.78631C34.732 11.1808 33.6 12.3047 32.2137 12.3047C30.8191 12.3047 29.6953 11.1726 29.6953 9.78631C29.6953 8.39177 30.8273 7.26794 32.2137 7.26794C33.6 7.26794 34.732 8.39998 34.732 9.78631Z" fill="white"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <svg viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M38.891 0H3.10078C1.38633 0 0 1.35352 0 3.02695V38.9648C0 40.6383 1.38633 42 3.10078 42H38.891C40.6055 42 42 40.6383 42 38.973V3.02695C42 1.35352 40.6055 0 38.891 0ZM12.4605 35.7902H6.22617V15.7418H12.4605V35.7902ZM9.34336 13.0102C7.3418 13.0102 5.72578 11.3941 5.72578 9.40078C5.72578 7.40742 7.3418 5.79141 9.34336 5.79141C11.3367 5.79141 12.9527 7.40742 12.9527 9.40078C12.9527 11.3859 11.3367 13.0102 9.34336 13.0102ZM35.7902 35.7902H29.5641V26.0449C29.5641 23.7234 29.523 20.7293 26.3238 20.7293C23.0836 20.7293 22.5914 23.2641 22.5914 25.8809V35.7902H16.3734V15.7418H22.3453V18.4816H22.4273C23.2559 16.9066 25.2902 15.2414 28.3172 15.2414C34.6254 15.2414 35.7902 19.3922 35.7902 24.7898V35.7902Z" fill="white"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <svg viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M41.5967 17.104H21.4473V25.1778H33.0252C32.8391 26.3205 32.4212 27.4445 31.8092 28.4695C31.108 29.6438 30.2412 30.5378 29.3527 31.2187C26.6912 33.2581 23.5882 33.6751 21.4333 33.6751C15.9896 33.6751 11.3383 30.1568 9.5377 25.376C9.46504 25.2025 9.41678 25.0233 9.35803 24.8462C8.96013 23.6294 8.74273 22.3407 8.74273 21.0013C8.74273 19.6074 8.97815 18.273 9.40741 17.0128C11.1006 12.0425 15.8567 8.33011 21.4372 8.33011C22.5596 8.33011 23.6406 8.46371 24.6656 8.73021C27.0082 9.33923 28.6652 10.5387 29.6806 11.4875L35.8072 5.48758C32.0804 2.07054 27.2222 5.16631e-09 21.427 5.16631e-09C16.7941 -9.97137e-05 12.5169 1.44337 9.0118 3.88287C6.16929 5.86125 3.83804 8.51004 2.26472 11.5863C0.801309 14.4387 0 17.5996 0 20.9982C0 24.3969 0.802534 27.5907 2.26595 30.4167V30.4357C3.81167 33.4359 6.07206 36.019 8.81931 37.9883C11.2193 39.7087 15.5228 42 21.427 42C24.8224 42 27.8316 41.3878 30.4855 40.2406C32.3999 39.413 34.0962 38.3336 35.6319 36.9463C37.6611 35.1133 39.2503 32.8459 40.335 30.2373C41.4198 27.6287 42 24.6788 42 21.4807C42 19.9912 41.8504 18.4786 41.5967 17.1039V17.104Z" fill="white"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <svg viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 0C32.5978 2.45968e-05 42 9.40218 42 21C42 32.5978 32.5978 42 21 42C17.3425 42 13.904 41.0647 10.9092 39.4209L0 42L2.79688 31.4775C1.0183 28.394 0 24.8156 0 21C4.83237e-08 9.40217 9.40219 0 21 0ZM21 3.76074C11.4796 3.76074 3.76193 11.4786 3.76172 20.999C3.76172 24.6699 4.90835 28.0732 6.86426 30.8691L5.05664 37.0293L11.502 35.3877C14.0553 37.077 17.0841 38.1047 20.3447 38.2266L21 38.2383C30.5205 38.2383 38.2383 30.5196 38.2383 20.999C38.2381 11.4786 30.5204 3.76077 21 3.76074ZM15.2285 10.6367C15.4857 10.6157 15.7224 10.7647 15.832 10.998L18.2275 16.0791C18.3406 16.3193 18.2911 16.6052 18.1035 16.793L16.3174 18.5781C15.9313 18.9642 15.8182 19.5659 16.084 20.043C16.7355 21.2113 17.612 22.3367 18.627 23.3721C19.6624 24.3871 20.7876 25.264 21.9561 25.915C22.4332 26.181 23.0341 26.0678 23.4209 25.6816L25.2061 23.8965C25.3938 23.7087 25.6796 23.6588 25.9199 23.7725L31.001 26.167C31.2343 26.2767 31.3843 26.5138 31.3633 26.7705C31.3084 27.439 31.0396 28.7786 29.8389 29.9795C26.4487 33.3696 20.3609 29.5343 20.1123 29.3857C18.6149 28.5813 17.192 27.5049 15.8428 26.1562C14.4942 24.8077 13.4167 23.385 12.6123 21.8877C12.4636 21.6404 8.62833 15.5521 12.0186 12.1611C13.2196 10.96 14.56 10.6916 15.2285 10.6367Z" fill="white"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="spline-container">
+        <spline-viewer id="my-spline" style="width: 100%; height: 100%;"></spline-viewer>
+        
+        <!-- Retângulo com a cor de fundo para cobrir a logo do Spline -->
+        <div class="spline-watermark-hider"></div>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const viewer = document.getElementById("my-spline");
+            const baseUrl = "https://prod.spline.design/5dwVYLACMauo6Eyk/scene.splinecode";
+            
+            // Força um timestamp sempre novo na URL para o navegador não usar o cache
+            viewer.setAttribute("url", baseUrl + "?t=" + new Date().getTime());
+
+            // Tentativa adicional de ocultar injetando CSS direto no Shadow DOM da logo
+            const hideInterval = setInterval(() => {
+                if (viewer.shadowRoot && viewer.shadowRoot.querySelector("#logo")) {
+                    const style = document.createElement("style");
+                    style.innerHTML = "#logo { display: none !important; opacity: 0 !important; visibility: hidden !important; }";
+                    viewer.shadowRoot.appendChild(style);
+                    clearInterval(hideInterval);
+                }
+            }, 100);
+            
+            // Para garantir que o intervalo pare caso o logo nunca seja achado
+            setTimeout(() => clearInterval(hideInterval), 5000);
+        });
+    </script>
+
+    <div class="hero-wrapper">
+    <header class="site-header">
+        <!-- Logo -->
+        <svg class="logo" width="115" height="60" viewBox="0 0 164 86" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Fábrica de Empresas logo">
+            <g clip-path="url(#logo-clip)">
+                <path d="M122.521 1.58157C99.3507 1.58157 80.5708 20.4721 80.5708 43.7783C80.5708 67.0845 99.3507 85.975 122.521 85.975C145.69 85.975 164.47 67.0845 164.47 43.7783C164.47 20.4721 145.686 1.58157 122.521 1.58157ZM115.054 63.9282H105.857V37.6517H106.687C111.304 37.6517 115.051 41.4207 115.051 46.0701V63.9304L115.054 63.9282ZM137.414 40.9623C137.414 45.6367 133.651 49.4239 129.004 49.4239H118.71V43.5673C118.71 41.6907 120.22 40.1727 122.085 40.1727H137.414V40.96V40.9623ZM143.996 26.6486C143.996 31.6226 139.988 35.6548 135.045 35.6548H115.051C109.973 35.6548 105.854 31.5137 105.854 26.4036H143.994V26.6486H143.996Z" fill="#222852"/>
+                <path d="M71.0438 43.7783V85.975C48.0319 85.975 29.0941 66.9257 29.0941 43.7783C29.0941 20.6309 48.0319 1.58157 71.0438 1.58157V43.7783Z" fill="#EE731B"/>
+                <path d="M19.5672 43.7783V67.8379C8.89028 67.8379 0.10376 56.9779 0.10376 43.7783C0.10376 30.5788 8.89028 19.7188 19.5672 19.7188V43.7783Z" fill="#222852"/>
+            </g>
+            <defs>
+                <clipPath id="logo-clip">
+                    <rect width="164" height="86" fill="white"/>
+                </clipPath>
+            </defs>
+        </svg>
+
+        <nav class="header-nav">
+            <a href="#" class="nav-cta">
+                <span class="nav-cta-text">VENHA NOS CONHECER</span>
+                <span class="nav-cta-underline"></span>
+            </a>
+
+            <button class="menu-btn" aria-label="Abrir menu">
+                <span class="menu-btn-line"></span>
+                <span class="menu-btn-line"></span>
+                <span class="menu-btn-line"></span>
+            </button>
+        </nav>
+    </header>
+
+    <main class="site-main">
+        <div class="hero-text">
+            <h1 class="hero-tagline">TIRAMOS SUA IDEIA DO PAPEL</h1>
+            <p class="hero-subtitle">COLOCAMOS SEU NEGÓCIO EM OPERAÇÃO</p>
+        </div>
+
+        <div class="scroll-indicator" aria-label="Role para baixo">
+            <span class="scroll-label">DESÇA</span>
+            <div class="scroll-line"></div>
+        </div>
+    </main>
+    </div>
+
+
+    <section class="services-section">
+        <h2 class="services-title">Tudo aquilo que construímos para o seu negócio.</h2>
+        <div class="services-list">
+            <div class="service-item">
+                <span class="service-name">DESENVOLVIMENTO WEB</span>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+            </div>
+            <div class="service-item">
+                <span class="service-name">PÁGINAS DE ALTA CONVERSÃO</span>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+            </div>
+            <div class="service-item">
+                <span class="service-name">AUTOMAÇÕES ESSENCIAIS</span>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+            </div>
+            <div class="service-item">
+                <span class="service-name">ATENDIMENTO COM IA</span>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+            </div>
+            <div class="service-item">
+                <span class="service-name">CONSULTORIA EM IA</span>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+
+    
+    <section class="services-details-section">
+        <div class="section-cta">COMO FUNCIONA</div>
+
+        <!-- Block 1: Desenvolvimento Web -->
+        <div class="feature-block">
+            <div class="feature-content">
+                <h3 class="feature-title">DESENVOLVIMENTO WEB</h3>
+                <p class="feature-desc">Construímos a sede digital da sua empresa. Um ambiente robusto, com design minimalista e arquitetura de ponta, projetado para transmitir autoridade e suportar o crescimento da sua marca.</p>
+                <span class="feature-tags">Arquitetura Web - Alta Performance - Design Profissional</span>
+            </div>
+            <div class="feature-image-placeholder"></div>
+        </div>
+        
+        <!-- Block 2: Páginas de Alta Conversão -->
+        <div class="feature-block reverse">
+            <div class="feature-content right-align">
+                <h3 class="feature-title">PÁGINAS DE ALTA CONVERSÃO</h3>
+                <p class="feature-desc">Desenhamos landing pages cirúrgicas. Uma estrutura enxuta e persuasiva, criada como uma verdadeira linha de montagem com um único objetivo: transformar visitantes em clientes.</p>
+                <span class="feature-tags">Foco em Vendas - Copywriting - Otimização</span>
+            </div>
+            <div class="feature-image-placeholder"></div>
+        </div>
+
+        <!-- Block 3: Automações Essenciais -->
+        <div class="feature-block">
+            <div class="feature-content">
+                <h3 class="feature-title">AUTOMAÇÕES ESSENCIAIS</h3>
+                <p class="feature-desc">Otimizamos o tempo da sua equipe implementando as engrenagens básicas de automação. Para integrações de alta complexidade, orquestramos a execução com parceiros homologados.</p>
+                <span class="feature-tags">Otimização de Processos - Integração Inteligente</span>
+            </div>
+            <div class="feature-image-placeholder"></div>
+        </div>
+    
+        <!-- Block 4: Atendimento com IA -->
+        <div class="feature-block">
+            <div class="feature-content">
+                <h3 class="feature-title">ATENDIMENTO COM IA</h3>
+                <p class="feature-desc">Implementamos operadores virtuais inteligentes na base do seu negócio. Uma solução tecnológica direta para automatizar o seu primeiro contato e fazer sua empresa operar 24 horas por dia.</p>
+                <span class="feature-tags">Operação 24/7 - Setup Ágil - Inovação</span>
+            </div>
+            <div class="feature-image-placeholder"></div>
+        </div>
+
+        <!-- Block 5: Consultoria em IA -->
+        <div class="feature-block reverse">
+            <div class="feature-content right-align">
+                <h3 class="feature-title">CONSULTORIA EM IA</h3>
+                <p class="feature-desc">Desenhamos a planta para a implementação de Inteligência Artificial no seu negócio. Mapeamos os seus gargalos e direcionamos as ferramentas certas para modernizar a sua linha de produção.</p>
+                <span class="feature-tags">Direcionamento Estratégico - Mapeamento - Inovação Prática</span>
+            </div>
+            <div class="feature-image-placeholder"></div>
+        </div>
+</section>
+    
+    
+    
+    <section class="video-section">
+        <div class="video-placeholder">
+            <a href="#" class="video-btn">ASSISTA O VÍDEO</a>
+        </div>
+    </section>
+    
+    <section class="experience-section">
+        <span class="experience-bg-text">ROBÓTICA</span>
+        
+        <div class="experience-content">
+            <div class="experience-title">NOSSA EXPERIÊNCIA</div>
+            
+            <div class="experience-image-placeholder"></div>
+            
+            <div class="experience-info">
+                <p class="experience-desc">Campeões nacionais da F1 in Schools e premiados no mundial em Singapura. Uma base forjada na precisão e alta performance das competições de robótica.</p>
+                <a href="#" class="experience-link">Veja nossa história completa</a>
+            </div>
+            
+            <div class="scroll-indicator" style="position: absolute; right: 40px; bottom: 40px;" aria-label="Role para baixo">
+                <span class="scroll-label">DESÇA</span>
+                <div class="scroll-line"></div>
+            </div>
+        </div>
+    </section>
+    
+    
+    <section class="experience-section">
+        <span class="experience-bg-text">NEGÓCIOS</span>
+        
+        <div class="experience-content">
+            <div class="experience-title">NOSSA EXPERIÊNCIA</div>
+            
+            <div class="experience-image-placeholder"></div>
+            
+            <div class="experience-info">
+                <p class="experience-desc">Lideramos operações reais em tecnologia, IA e seguros. Sabemos exatamente o que o seu projeto precisa porque estruturamos e escalamos negócios na prática.</p>
+                <a href="#" class="experience-link">Veja nossa história completa</a>
+            </div>
+            
+            <div class="scroll-indicator" style="position: absolute; right: 40px; bottom: 40px;" aria-label="Role para baixo">
+                <span class="scroll-label">DESÇA</span>
+                <div class="scroll-line"></div>
+            </div>
+        </div>
+    </section>
+    
+    
+    <section class="experience-section">
+        <span class="experience-bg-text">FORMAÇÃO</span>
+        
+        <div class="experience-content">
+            <div class="experience-title">NOSSA EXPERIÊNCIA</div>
+            
+            <div class="experience-image-placeholder"></div>
+            
+            <div class="experience-info">
+                <p class="experience-desc">Aliamos o raciocínio lógico da Engenharia ao desenvolvimento web avançado, construindo ecossistemas digitais com tecnologias modernas como React, TypeScript e Inteligência Artificial.</p>
+                <a href="#" class="experience-link">Veja nossa história completa</a>
+            </div>
+            
+            <div class="scroll-indicator" style="position: absolute; right: 40px; bottom: 40px;" aria-label="Role para baixo">
+                <span class="scroll-label">DESÇA</span>
+                <div class="scroll-line"></div>
+            </div>
+        </div>
+    </section>
+    
+    
+    <section class="about-section">
+        <h2 class="about-main-title">SOBRE</h2>
+        
+        <!-- Block 1 -->
+        <div class="about-block">
+            <div class="about-content right-align">
+                <h3 class="about-title">NOSSA TRAJETÓRIA</h3>
+                <p class="about-desc">Forjados no automobilismo de alta performance. Campeões nacionais na F1 in Schools e competidores no mundial em Singapura. Hoje, aplicamos essa mesma precisão para estruturar negócios digitais.</p>
+            </div>
+            <div class="about-image-placeholder"></div>
+        </div>
+
+        <!-- Block 2 -->
+        <div class="about-block reverse">
+            <div class="about-content">
+                <h3 class="about-title">MISSÃO E VISÃO</h3>
+                <p class="about-desc">Com base na Engenharia, tratamos o digital como infraestrutura, não como arte. Nosso foco é construir máquinas de conversão sólidas, autônomas e altamente escaláveis.</p>
+            </div>
+            <div class="about-image-placeholder"></div>
+        </div>
+
+        
+        <!-- Block 3 -->
+        <div class="about-block">
+            <div class="about-content right-align">
+                <h3 class="about-title">LIDERANÇA</h3>
+                <p class="about-desc">Guilherme e Gustavo unem o raciocínio lógico da engenharia à visão prática de negócios. Não somos apenas desenvolvedores; somos projetistas de soluções orientados a dados.</p>
+            </div>
+            <div class="about-image-placeholder"></div>
+        </div>
+
+        <!-- Block 4 -->
+        <div class="about-block reverse">
+            <div class="about-content">
+                <h3 class="about-title">METODOLOGIA</h3>
+                <p class="about-desc">Uma linha de produção rigorosa: mapeamento do problema, design estrutural, código e testes de estresse. Metodologia validada para entregas impecáveis e com performance máxima.</p>
+            </div>
+            <div class="about-image-placeholder"></div>
+        </div>
+
+        <div class="scroll-indicator" style="align-self: flex-end; margin-top: -60px; position: relative; right: 20px;" aria-label="Role para baixo">
+            <span class="scroll-label">DESÇA</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+    
+    
+    <section class="contact-section">
+        <div class="contact-content">
+            <h2 class="contact-title">VAMOS CONVERSAR</h2>
+            <p class="contact-subtitle">Vamos construir juntos o seu negócio.</p>
+            
+            <form class="contact-form" onsubmit="event.preventDefault();">
+                <input type="text" class="form-input" placeholder="NOME" required>
+                <input type="email" class="form-input" placeholder="EMAIL" required>
+                <input type="text" class="form-input" placeholder="SERVIÇOS" required>
+                
+                <button type="submit" class="submit-btn">ENVIAR</button>
+            </form>
+        </div>
+        
+        <div class="contact-image-placeholder"></div>
+    </section>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const menuBtn = document.querySelector('.menu-btn');
+            const closeBtn = document.getElementById('closeMenuBtn');
+            const menuOverlay = document.getElementById('menuOverlay');
+
+            if(menuBtn && closeBtn && menuOverlay) {
+                menuBtn.addEventListener('click', () => {
+                    menuOverlay.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // prevent scrolling underneath
+                });
+                closeBtn.addEventListener('click', () => {
+                    menuOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+        });
+    </script>
+    
+</body>
+</html>
