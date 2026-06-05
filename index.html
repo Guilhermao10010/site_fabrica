@@ -15,7 +15,7 @@
             --color-blue: #222852;
             --color-orange: #EE731B;
             --color-black: #000;
-            --color-menu-btn: #595959;
+            --color-menu-btn: #212853;
             --font-heading: 'Oswald', -apple-system, Roboto, Helvetica, sans-serif;
             --font-scroll: 'Poppins', -apple-system, Roboto, Helvetica, sans-serif;
         }
@@ -109,12 +109,144 @@
             color: var(--color-black);
             letter-spacing: 0.02em;
             white-space: nowrap;
+            display: flex;
+        }
+
+        .nav-cta-text span {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-cta:hover .nav-cta-text span {
+            animation: wave 0.4s ease-in-out;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         .nav-cta-underline {
             height: 2px;
-            background: var(--color-black);
             width: 100%;
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-cta-underline::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background: var(--color-black);
+            transform: translateX(0);
+        }
+
+        .nav-cta:hover .nav-cta-underline::after {
+            animation: underline-slide 0.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+        }
+
+        @keyframes underline-slide {
+            0%   { transform: translateX(0); }
+            49%  { transform: translateX(100%); opacity: 1; }
+            50%  { transform: translateX(-100%); opacity: 0; }
+            51%  { transform: translateX(-100%); opacity: 1; }
+            100% { transform: translateX(0); }
+        }
+
+        /* ── Loading Screen ── */
+        #loading-screen {
+            position: fixed;
+            inset: 0;
+            background: #212853;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s cubic-bezier(0.7, 0, 0.3, 1), visibility 0.8s;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loader-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .loader-logo {
+            animation: loader-logo-in 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            opacity: 0;
+        }
+
+        @keyframes loader-logo-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .loader-line-wrap {
+            width: 200px;
+            height: 2px;
+            overflow: hidden;
+            background: rgba(239,239,238,0.15);
+        }
+
+        .loader-line {
+            width: 100%;
+            height: 100%;
+            background: #EE731B;
+            transform: translateX(-100%);
+            animation: loader-line-enter 0.6s 0.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+        }
+
+        @keyframes loader-line-enter {
+            from { transform: translateX(-100%); }
+            to   { transform: translateX(0); }
+        }
+
+        .loader-label {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 0.25em;
+            color: #EFEFEE;
+            opacity: 0;
+            animation: loader-label-in 0.6s 0.7s ease forwards;
+        }
+
+        @keyframes loader-label-in {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 0.7; transform: translateY(0); }
+        }
+
+        /* wave on each letter */
+        .loader-label span {
+            display: inline-block;
+            animation: loader-wave 1.4s ease-in-out infinite;
+        }
+
+        @keyframes loader-wave {
+            0%, 60%, 100% { transform: translateY(0); }
+            30%            { transform: translateY(-6px); }
+        }
+
+        .loader-progress-wrap {
+            width: 200px;
+            height: 1px;
+            background: rgba(239,239,238,0.15);
+            overflow: hidden;
+        }
+
+        .loader-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: rgba(239,239,238,0.5);
+            transition: width 0.3s ease;
         }
 
         .menu-btn {
@@ -122,7 +254,7 @@
             height: 42px;
             border-radius: 50%;
             background: var(--color-menu-btn);
-            border: none;
+            border: 1px solid transparent;
             cursor: pointer;
             display: flex;
             flex-direction: column;
@@ -130,7 +262,24 @@
             align-items: center;
             gap: 5px;
             flex-shrink: 0;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, background 0.3s ease, border 0.3s ease;
+            position: relative;
+        }
+
+        .menu-btn.open {
+            border: 1px solid var(--color-bg);
+        }
+
+        .menu-btn:focus, .menu-btn:focus-visible {
+            outline: none;
+            box-shadow: none;
+        }
+
+        .menu-btn::before {
+            content: '';
+            position: absolute;
+            top: -20px; left: -20px; right: -20px; bottom: -20px;
+            border-radius: 50%;
         }
 
         .menu-btn-line {
@@ -161,10 +310,11 @@
             transition: all 0.3s ease;
         }
 
-        body.menu-open .nav-cta-text {
+        body.menu-open .nav-cta-text,
+        body.menu-open .nav-cta-text span {
             color: var(--color-bg);
         }
-        body.menu-open .nav-cta-underline {
+        body.menu-open .nav-cta-underline::after {
             background: var(--color-bg);
         }
         body.menu-open .logo path[fill="#222852"] {
@@ -248,6 +398,25 @@
             width: 2px;
             height: 60px; /* Reduzido ~20% */
             background: var(--color-black);
+            animation: line-loop 5s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+        }
+
+        @keyframes line-loop {
+            0%, 60% { transform: translateY(0); }
+            70% { transform: translateY(-101%); }
+            70.1%, 90% { transform: translateY(101%); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes vertical-wave {
+            0%, 90% { transform: translateX(0); }
+            95% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+
+        .vertical-wave-text span {
+            display: inline-block;
+            animation: vertical-wave 5s cubic-bezier(0.7, 0, 0.3, 1) infinite;
         }
 
         /* ── Responsive ── */
@@ -366,12 +535,8 @@
         .menu-links {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: clamp(20px, 5vh, 45px); /* Melhor distribuído verticalmente */
             padding-left: 100px; /* Espaço para a linha lateral e os números */
-        }
-
-        .menu-links:hover a {
-            color: #000; /* As outras ficam pretas */
         }
 
         .menu-links a {
@@ -381,39 +546,62 @@
             color: var(--color-bg);
             font-family: var(--font-heading);
             font-weight: 400;
-            font-size: clamp(40px, 5vw, 60px);
+            font-size: clamp(48px, 6vw, 72px); /* Aumentado 20% */
             text-decoration: none;
             text-transform: uppercase;
-            transition: color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-links a::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #000;
+            -webkit-text-stroke: 1.5px #000; /* Extra coverage for the white anti-aliasing */
+            clip-path: inset(0 100% 0 0);
+            transition: clip-path 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu-links:hover a::after {
+            clip-path: inset(0 0 0 0);
+        }
+
+        .menu-links a:hover::after {
+            clip-path: inset(0 100% 0 0);
         }
 
         .menu-links a::before {
             content: attr(data-number);
             position: absolute;
-            left: -40px;
+            left: -25px; /* Mais perto do título */
             font-size: clamp(14px, 2vw, 20px);
             font-weight: 600;
             opacity: 0;
+            transform: translateX(15px); /* Sai da palavra */
             color: var(--color-bg);
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2;
         }
 
         .menu-links a:hover {
-            color: var(--color-bg); /* O hover fica branco */
             transform: translateX(20px);
         }
 
         .menu-links a:hover::before {
             opacity: 1;
+            transform: translateX(0); /* Entra de volta no lugar */
         }
 
         .menu-info {
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
-            text-align: right;
+            align-items: flex-start;
+            text-align: left;
             max-width: 500px;
             gap: 30px;
+            margin-top: 180px;
+            margin-right: 150px;
         }
 
         .venha-conhecer-menu {
@@ -435,19 +623,41 @@
         .contact-details {
             display: flex;
             flex-direction: column;
+            align-items: flex-start;
             gap: 10px;
             font-family: var(--font-scroll);
             font-weight: 600;
-            font-size: clamp(20px, 2.5vw, 35px);
+            font-size: clamp(10px, 1.25vw, 18px); /* Reduzido ~50% */
         }
 
-        .contact-email {
+        .contact-sliding-container {
+            position: relative;
+            text-decoration: none;
             color: var(--color-orange);
-            text-decoration: underline;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: flex-start;
+            cursor: pointer;
         }
 
-        .contact-phone {
-            color: var(--color-orange);
+        .contact-sliding-container .sliding-line {
+            width: 100%;
+            height: 2px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 2px;
+        }
+
+        .contact-sliding-container .sliding-line::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background: var(--color-orange);
+            transform: translateX(0);
+        }
+
+        .contact-sliding-container:hover .sliding-line::after {
+            animation: underline-slide 0.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
         }
 
         .contact-address {
@@ -456,13 +666,14 @@
 
         .social-icons-container {
             display: flex;
-            gap: 15px;
+            gap: 25px; /* Mais espaçados */
             margin-top: 20px;
+            justify-content: flex-start;
         }
 
         .social-icon {
-            width: 42px;
-            height: 42px;
+            width: 24px;
+            height: 24px;
             transition: transform 0.2s;
         }
 
@@ -483,6 +694,8 @@
             .menu-info {
                 align-items: flex-start;
                 text-align: left;
+                margin-top: 20px;
+                margin-right: 0;
             }
             .venha-conhecer-menu {
                 flex-direction: row-reverse;
@@ -1241,22 +1454,30 @@
             <path opacity="0.88" d="M0 1031C40.108 499.301 224.43 258.022 770.5 0" stroke="#EFEFEE"/>
         </svg>
 
-        <div class="menu-side-container" style="position: absolute; left: 40px; top: 60px; display: flex; flex-direction: column; align-items: center; gap: 20px; z-index: 10;">
-            <div class="menu-text-vertical" style="font-size: 14px; letter-spacing: 0.1em; writing-mode: vertical-rl; transform: rotate(180deg);">MENU</div>
-            <div class="menu-side-line" style="width: 2px; height: 80px; background-color: var(--color-bg);"></div>
+        <div class="menu-side-container" style="position: absolute; left: 40px; top: 120px; display: flex; flex-direction: column; align-items: center; gap: 20px; z-index: 10;">
+            <div class="menu-text-vertical vertical-wave-text" style="font-size: 14px; letter-spacing: 0.1em; writing-mode: vertical-rl; transform: rotate(180deg);">MENU</div>
+            <div style="overflow: hidden; width: 2px; height: 80px;">
+                <div class="menu-side-line" style="width: 100%; height: 100%; background-color: var(--color-bg); animation: line-loop 5s cubic-bezier(0.7, 0, 0.3, 1) infinite;"></div>
+            </div>
         </div>
 
         <div class="menu-content">
             <nav class="menu-links">
-                <a href="#" data-number="01">SOLUÇÕES</a>
-                <a href="#" data-number="02">PROJETOS</a>
-                <a href="#" data-number="03">SOBRE NÓS</a>
-                <a href="#" data-number="04">CONTATO</a>
+                <a href="#" data-number="01" data-text="SOLUÇÕES">SOLUÇÕES</a>
+                <a href="#" data-number="02" data-text="PROJETOS">PROJETOS</a>
+                <a href="#" data-number="03" data-text="SOBRE NÓS">SOBRE NÓS</a>
+                <a href="#" data-number="04" data-text="CONTATO">CONTATO</a>
             </nav>
             <div class="menu-info">
                 <div class="contact-details">
-                    <a href="mailto:teste@teste.com" class="contact-email">teste@ teste.com</a>
-                    <span class="contact-phone">62 99851-1232</span>
+                    <a href="mailto:teste@teste.com" class="contact-sliding-container">
+                        <span>teste@ teste.com</span>
+                        <div class="sliding-line"></div>
+                    </a>
+                    <span class="contact-sliding-container">
+                        <span>62 99851-1232</span>
+                        <div class="sliding-line"></div>
+                    </span>
                     <span class="contact-address">Rua Dona Maria<br>Rodrigues Ramos Qd 1A<br>Lt 23 Casa 2</span>
                 </div>
                 <div class="social-icons-container">
@@ -1297,6 +1518,56 @@
     
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            // Animacao Wave
+            const ctaText = document.querySelector('.nav-cta-text');
+            if (ctaText) {
+                const text = ctaText.textContent.trim();
+                ctaText.innerHTML = '';
+                text.split('').forEach((char, i) => {
+                    const span = document.createElement('span');
+                    if (char === ' ') {
+                        span.innerHTML = '&nbsp;';
+                    } else {
+                        span.textContent = char;
+                    }
+                    span.style.animationDelay = `${i * 0.03}s`;
+                    ctaText.appendChild(span);
+                });
+            }
+
+            // Animacao Wave Vertical
+            const waveVerticalTexts = document.querySelectorAll('.vertical-wave-text');
+            waveVerticalTexts.forEach(el => {
+                const text = el.textContent.trim();
+                el.innerHTML = '';
+                text.split('').forEach((char, i) => {
+                    const span = document.createElement('span');
+                    if (char === ' ') {
+                        span.innerHTML = '&nbsp;';
+                    } else {
+                        span.textContent = char;
+                    }
+                    span.style.animationDelay = `${i * 0.1}s`;
+                    el.appendChild(span);
+                });
+            });
+
+            // Magnetic Button Menu
+            const magnetBtn = document.querySelector('.menu-btn');
+            if (magnetBtn) {
+                magnetBtn.addEventListener('mousemove', (e) => {
+                    const rect = magnetBtn.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    magnetBtn.style.transition = 'none';
+                    magnetBtn.style.transform = `translate(${x * 0.4}px, ${y * 0.4}px)`;
+                });
+                magnetBtn.addEventListener('mouseleave', () => {
+                    magnetBtn.style.transition = 'transform 0.3s ease, background 0.3s ease';
+                    magnetBtn.style.transform = `translate(0px, 0px)`;
+                });
+            }
+
             // Custom Cursor Logic
             const cursor = document.getElementById('customCursor');
             const serviceImages = document.querySelectorAll('.services-details-section .feature-image-placeholder');
@@ -1441,6 +1712,35 @@
         });
     </script>
 
+    <!-- ── Loading Screen ── -->
+    <div id="loading-screen">
+        <div class="loader-content">
+            <!-- Logo SVG duplicado para o loading -->
+            <svg class="loader-logo" width="80" height="42" viewBox="0 0 164 86" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#loader-logo-clip)">
+                    <path d="M122.521 1.58157C99.3507 1.58157 80.5708 20.4721 80.5708 43.7783C80.5708 67.0845 99.3507 85.975 122.521 85.975C145.69 85.975 164.47 67.0845 164.47 43.7783C164.47 20.4721 145.686 1.58157 122.521 1.58157ZM115.054 63.9282H105.857V37.6517H106.687C111.304 37.6517 115.051 41.4207 115.051 46.0701V63.9304L115.054 63.9282ZM137.414 40.9623C137.414 45.6367 133.651 49.4239 129.004 49.4239H118.71V43.5673C118.71 41.6907 120.22 40.1727 122.085 40.1727H137.414V40.96V40.9623ZM143.996 26.6486C143.996 31.6226 139.988 35.6548 135.045 35.6548H115.051C109.973 35.6548 105.854 31.5137 105.854 26.4036H143.994V26.6486H143.996Z" fill="#EFEFEE"/>
+                    <path d="M71.0438 43.7783V85.975C48.0319 85.975 29.0941 66.9257 29.0941 43.7783C29.0941 20.6309 48.0319 1.58157 71.0438 1.58157V43.7783Z" fill="#EE731B"/>
+                    <path d="M19.5672 43.7783V67.8379C8.89028 67.8379 0.10376 56.9779 0.10376 43.7783C0.10376 30.5788 8.89028 19.7188 19.5672 19.7188V43.7783Z" fill="#EFEFEE"/>
+                </g>
+                <defs>
+                    <clipPath id="loader-logo-clip">
+                        <rect width="164" height="86" fill="white"/>
+                    </clipPath>
+                </defs>
+            </svg>
+
+            <div class="loader-line-wrap">
+                <div class="loader-line"></div>
+            </div>
+
+            <div class="loader-label" id="loaderLabel">FÁBRICA DE EMPRESAS</div>
+
+            <div class="loader-progress-wrap">
+                <div class="loader-progress-bar" id="loaderProgressBar"></div>
+            </div>
+        </div>
+    </div>
+
     <header class="site-header">
         <!-- Logo -->
         <svg class="logo" width="115" height="60" viewBox="0 0 164 86" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Fábrica de Empresas logo">
@@ -1493,8 +1793,10 @@
         </div>
 
         <div class="scroll-indicator" aria-label="Role para baixo">
-            <span class="scroll-label">DESÇA</span>
-            <div class="scroll-line"></div>
+            <span class="scroll-label vertical-wave-text">DESÇA</span>
+            <div style="overflow: hidden; width: 2px; height: 60px;">
+                <div class="scroll-line" style="height: 100%;"></div>
+            </div>
         </div>
     </main>
     </div>
@@ -1783,6 +2085,61 @@
             }
 });
     </script>
-    
+
+    <!-- Loading Screen JS -->
+    <script>
+        (function() {
+            const screen = document.getElementById('loading-screen');
+            const label  = document.getElementById('loaderLabel');
+            const bar    = document.getElementById('loaderProgressBar');
+
+            // Wrap each char in a span for wave
+            if (label) {
+                const text = label.textContent;
+                label.innerHTML = '';
+                text.split('').forEach((char, i) => {
+                    const s = document.createElement('span');
+                    s.textContent = char === ' ' ? '\u00A0' : char;
+                    s.style.animationDelay = `${1 + i * 0.07}s`;
+                    label.appendChild(s);
+                });
+            }
+
+            let progress = 0;
+            let dismissed = false;
+
+            function setProgress(p) {
+                progress = Math.min(p, 100);
+                if (bar) bar.style.width = progress + '%';
+            }
+
+            function dismiss() {
+                if (dismissed) return;
+                dismissed = true;
+                setProgress(100);
+                setTimeout(() => {
+                    if (screen) screen.classList.add('hidden');
+                    // Remove from DOM after transition
+                    setTimeout(() => { if (screen) screen.remove(); }, 900);
+                }, 300);
+            }
+
+            // Simulate progress until real load
+            const fakeTimer = setInterval(() => {
+                if (progress < 85) setProgress(progress + Math.random() * 12);
+            }, 220);
+
+            window.addEventListener('load', () => {
+                clearInterval(fakeTimer);
+                setProgress(100);
+                // small pause so user sees 100% before dismissal
+                setTimeout(dismiss, 400);
+            });
+
+            // Fallback: dismiss after 6s even if load event doesn't fire
+            setTimeout(dismiss, 6000);
+        })();
+    </script>
+
 </body>
 </html>
