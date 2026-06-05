@@ -6,7 +6,7 @@
     <title>Fábrica de Empresas</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@600;700&family=Poppins:wght@700&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -18,6 +18,7 @@
             --color-menu-btn: #212853;
             --font-heading: 'Oswald', -apple-system, Roboto, Helvetica, sans-serif;
             --font-scroll: 'Poppins', -apple-system, Roboto, Helvetica, sans-serif;
+            --font-thin: 'Inter', -apple-system, Roboto, Helvetica, sans-serif;
         }
 
         html, body {
@@ -740,42 +741,124 @@
             min-height: 100vh;
         }
 
-        .services-title {
+        .services-left-area {
             flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .services-title {
             font-size: clamp(30px, 4vw, 55px);
             font-weight: 700;
             max-width: 550px;
             line-height: 1.2;
             color: var(--color-black);
             font-family: var(--font-scroll);
+            transition: opacity 0.3s;
+        }
+
+        .services-hover-images {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+
+        .hover-img {
+            position: absolute;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 0;
+            opacity: 0;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            transform: translateY(20px) scale(0.95);
+            box-shadow: none;
+        }
+
+        .hover-img.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        #hover-img-landing.active {
+            transform: translateY(0) scale(1.3);
         }
 
         .services-list {
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 40px;
-            max-width: 650px;
+            gap: 60px;
+            margin-top: 60px;
+            max-width: 450px;
             width: 100%;
         }
 
         .service-item {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-            padding-bottom: 20px;
+            flex-direction: column;
+            align-items: flex-start;
+            border-bottom: none;
+            padding-bottom: 0px;
             cursor: pointer;
-            transition: opacity 0.2s, transform 0.2s;
+            transition: transform 0.2s;
+        }
+
+        .service-header {
+            display: flex;
+            justify-content: flex-start;
+            gap: 15px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .service-content {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease;
+            font-size: clamp(14px, 1.8vw, 18px);
+            line-height: 1.6;
+            color: var(--color-black);
+            font-family: var(--font-thin);
+            margin-top: 0;
+        }
+
+        .service-item.open .service-content {
+            max-height: 300px;
+            opacity: 1;
+            margin-top: 15px;
         }
 
         .service-item:hover {
-            opacity: 0.7;
             transform: translateX(10px);
+        }
+        
+        .service-item:hover .service-icon svg {
+            stroke: var(--color-orange);
+            transform: translateY(-5px);
+        }
+
+        .service-item.open .service-icon svg {
+            stroke: var(--color-orange);
+            transform: rotate(180deg);
+        }
+
+        .service-item.open:hover .service-icon svg {
+            transform: translateY(-5px) rotate(180deg);
         }
 
         .service-name {
-            font-size: clamp(24px, 3vw, 40px);
+            font-size: clamp(16px, 2.1vw, 28px);
             font-weight: 600;
             color: var(--color-black);
             font-family: var(--font-heading);
@@ -798,7 +881,22 @@
             stroke-width: 3;
             stroke-linecap: round;
             stroke-linejoin: round;
+            transition: stroke 0.2s, transform 0.2s;
         }
+
+        /* --- SCROLL LOAD/UNLOAD ANIMATIONS --- */
+        .scroll-fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: opacity, transform;
+        }
+        
+        .scroll-fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
 
         @media (max-width: 900px) {
             .services-section {
@@ -814,29 +912,29 @@
             position: relative;
             z-index: 10;
             background-color: var(--color-bg);
-            padding: 100px 0; /* Remove lateral padding so images can bleed */
-            display: flex;
-            flex-direction: column;
-            gap: 100px;
+            padding: 100px 40px; 
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
             min-height: 100vh;
+            align-items: start;
         }
 
-        
+        .feature-col {
+            display: flex;
+            flex-direction: column;
+            gap: 120px;
+        }
 
-        
+        .col-right {
+            margin-top: 150px;
+        }
 
         .feature-block {
             display: flex;
-            align-items: flex-start;
-            justify-content: flex-start;
+            flex-direction: column;
             gap: 30px;
-            flex-direction: column-reverse; /* Image on TOP, Text BELOW */
-            padding: 0 40px;
-        }
-
-        .feature-block.reverse {
-            flex-direction: column-reverse; /* Image on TOP, Text BELOW */
-            padding: 0 40px;
+            width: 100%;
         }
 
         .feature-content {
@@ -844,17 +942,12 @@
             flex-direction: column;
             gap: 20px;
             padding: 0;
-            max-width: 60%;
             width: 100%;
-        }
-
-        .feature-content.right-align {
             text-align: left;
-            align-items: flex-start;
         }
 
         .feature-title {
-            font-size: clamp(28px, 4vw, 45px);
+            font-size: clamp(28px, 3vw, 40px);
             font-weight: 600;
             color: var(--color-black);
             font-family: var(--font-heading);
@@ -863,26 +956,28 @@
         }
 
         .feature-desc {
-            font-size: clamp(16px, 1.5vw, 18px);
+            font-size: clamp(16px, 1.2vw, 18px);
             font-weight: 400;
-            color: var(--color-black);
+            color: rgba(0,0,0,0.7);
             font-family: var(--font-scroll);
             line-height: 1.6;
         }
 
         .feature-tags {
-            font-size: clamp(14px, 1.2vw, 16px);
-            font-weight: 400;
-            color: rgba(0, 0, 0, 0.4);
+            font-size: clamp(14px, 1vw, 16px);
+            font-weight: 600;
+            color: var(--color-orange);
             font-family: var(--font-scroll);
         }
 
         .feature-image-placeholder {
-            height: 450px;
-            background-color: #D9D9D9;
-            width: 60%;
-            max-width: 60%;
-            transition: transform 0.3s ease;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            background-color: #d9d9d9;
+            border-radius: 12px;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.4s ease;
         }
         
         .feature-image-placeholder:hover {
@@ -891,28 +986,15 @@
 
         @media (max-width: 900px) {
             .services-details-section {
-                padding: 60px 0;
-                gap: 60px;
+                grid-template-columns: 1fr;
+                padding: 60px 20px;
+                gap: 80px;
             }
-            .feature-block, .feature-block.reverse {
-                flex-direction: column-reverse; /* Image on TOP for mobile */
-                text-align: left;
-                padding: 0 20px;
+            .feature-col {
+                gap: 80px;
             }
-            .feature-content {
-                max-width: 100%;
-                padding: 0;
-            }
-            .feature-image-placeholder {
-                max-width: 100%;
-                width: 100%;
-            }
-            .feature-content.right-align {
-                text-align: left;
-                align-items: flex-start;
-            }
-            .feature-image-placeholder {
-                height: 300px;
+            .col-right {
+                margin-top: 0;
             }
         }
 
@@ -957,17 +1039,18 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, 50%); /* Start masked at the bottom */
             font-family: var(--font-heading);
             font-size: clamp(100px, 15vw, 300px);
             font-weight: 600;
-            color: rgba(0, 0, 0, 0.03);
+            color: rgba(0, 0, 0, 0.23); /* Opacity increased by 20% */
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Sombra no titulo do fundo */
             white-space: nowrap;
             z-index: 1;
             user-select: none;
             letter-spacing: 0.05em;
-            clip-path: inset(0 100% 0 0); /* Initial state: erased */
-            transition: clip-path 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1s ease, opacity 1s ease;
+            clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%); /* Floor mask */
+            transition: clip-path 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .experience-content {
@@ -991,28 +1074,33 @@
             font-size: clamp(24px, 3vw, 35px);
             color: var(--color-black);
             z-index: 3;
-            transform: translateX(-100vw);
+            overflow: hidden;
+            padding-top: 15px; /* space for wave */
+            margin-top: -15px;
+            padding-bottom: 5px;
+        }
+
+        .title-wrapper {
+            display: inline-block;
+            transform: translateY(110%);
             transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .experience-title.visible {
-            transform: translateX(0);
+        .experience-title.visible .title-wrapper {
+            transform: translateY(0);
         }
 
-        .experience-title span {
+        .experience-title span.char-span {
             display: inline-block;
         }
 
-        .experience-title.visible span {
-            animation: wave-text-loop 3s infinite ease-in-out;
-            animation-delay: 1.2s; /* wait for entrance */
+        .experience-title.visible span.char-span {
+            animation: wave-text-loop 4s infinite ease-in-out;
         }
 
         @keyframes wave-text-loop {
-            0%, 80% { transform: translateY(0); }
-            85% { transform: translateY(-10px); }
-            90% { transform: translateY(0); }
-            95% { transform: translateY(-5px); }
+            0%, 85% { transform: translateY(0); }
+            92.5% { transform: translateY(-5px); }
             100% { transform: translateY(0); }
         }
 
@@ -1020,34 +1108,30 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-60%, -50%) rotate(-55deg) scaleX(0); /* Initial closed sanfona */
-            width: clamp(240px, 48vw, 720px);
-            height: clamp(84px, 16.8vw, 196px); /* Reduced by 30% from 120/24vw/280 */
+            transform: translate(-60%, -50%) rotate(-55deg) translateY(50%) scaleY(0.01) scaleX(1); /* Initial line state */
+            width: clamp(180px, 35vw, 550px);
+            height: clamp(120px, 24vw, 280px);
             background-color: #D9D9D9;
             box-shadow: 0 30px 60px rgba(0,0,0,0.1);
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 2;
-        }
-        
-        .experience-image-placeholder:hover {
-            transform: translate(-60%, -50%) rotate(-55deg) scale(1.02) !important;
         }
 
         .experience-info {
             position: absolute;
-            bottom: 120px;
+            bottom: 190px;
             right: 120px;
             max-width: 550px;
             display: flex;
             flex-direction: column;
-            gap: 30px;
             z-index: 3;
+            transition: clip-path 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .experience-desc {
-            font-family: var(--font-scroll);
-            font-weight: 400;
-            font-size: clamp(16px, 1.5vw, 25px);
+            font-family: var(--font-thin);
+            font-weight: 300;
+            font-size: clamp(14px, 1.3vw, 23px);
             color: var(--color-black);
             line-height: 1.5;
         }
@@ -1056,14 +1140,17 @@
             position: relative;
             display: inline-flex;
             align-items: center;
-            font-family: var(--font-scroll);
-            font-weight: 600;
-            font-size: clamp(16px, 1.2vw, 20px);
+            font-family: var(--font-thin);
+            font-weight: 300;
+            font-size: clamp(12px, 1.0vw, 16px);
             color: var(--color-black);
             text-decoration: none;
             padding-left: 24px;
-            transition: opacity 0.2s;
+            padding-right: 16px;
+            min-height: 48px;
+            transition: opacity 0.2s, color 0.3s;
             margin-top: 10px;
+            z-index: 1;
         }
 
         .experience-link::before {
@@ -1075,13 +1162,13 @@
             width: 48px;
             height: 48px;
             background-color: #D9D9D9;
-            border-radius: 50%;
+            border-radius: 24px;
             z-index: -1;
-            transition: transform 0.2s;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .experience-link:hover::before {
-            transform: translateY(-50%) scale(1.1);
+            width: 100%;
         }
 
         @media (max-width: 900px) {
@@ -1649,6 +1736,27 @@
                 });
             });
 
+            // Animacao Wave Experience Title
+            const expTitleDiv = document.getElementById('exp-main-title');
+            if (expTitleDiv) {
+                const text = expTitleDiv.textContent.trim();
+                expTitleDiv.innerHTML = '';
+                const wrapper = document.createElement('span');
+                wrapper.className = 'title-wrapper';
+                text.split('').forEach((char, i) => {
+                    const span = document.createElement('span');
+                    span.className = 'char-span';
+                    if (char === ' ') {
+                        span.innerHTML = '&nbsp;';
+                    } else {
+                        span.textContent = char;
+                    }
+                    span.style.animationDelay = `${1.2 + (i * 0.05)}s`;
+                    wrapper.appendChild(span);
+                });
+                expTitleDiv.appendChild(wrapper);
+            }
+
             // Magnetic Button Menu
             const magnetBtn = document.querySelector('.menu-btn');
             if (magnetBtn) {
@@ -1902,36 +2010,70 @@
 
 
     <section class="services-section" id="secao-solucoes">
-        <h2 class="services-title">Tudo aquilo que construímos para o seu negócio.</h2>
+        <div class="services-left-area">
+            <h2 class="services-title">Tudo aquilo que construímos para o seu negócio.</h2>
+        </div>
+        <div class="services-hover-images">
+            <img src="desenvolvimento.png" class="hover-img" id="hover-img-desenvolvimento" alt="Desenvolvimento Web">
+            <img src="landing.png" class="hover-img" id="hover-img-landing" alt="Landing Pages">
+            <img src="automacacao.png" class="hover-img" id="hover-img-automacao" alt="Automações Essenciais">
+            <img src="agente.png" class="hover-img" id="hover-img-agente" alt="Agentes com IA">
+            <img src="consultoria.png" class="hover-img" id="hover-img-consultoria" alt="Consultoria em IA">
+        </div>
         <div class="services-list">
-            <div class="service-item">
-                <span class="service-name">DESENVOLVIMENTO WEB</span>
-                <div class="service-icon">
-                    <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <div class="service-item" data-hover-target="hover-img-desenvolvimento">
+                <div class="service-header">
+                    <span class="service-name">DESENVOLVIMENTO WEB</span>
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
+                </div>
+                <div class="service-content">
+                    Desenvolvimento de plataformas web sob medida. Construímos desde sites institucionais clássicos para apresentação de empresas e catálogos digitais, até e-commerces (lojas virtuais) completos, com painel de gestão, integração de estoque e meios de pagamento.
                 </div>
             </div>
-            <div class="service-item">
-                <span class="service-name">PÁGINAS DE ALTA CONVERSÃO</span>
-                <div class="service-icon">
-                    <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <div class="service-item" data-hover-target="hover-img-landing">
+                <div class="service-header">
+                    <span class="service-name">PÁGINAS DE ALTA CONVERSÃO</span>
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
+                </div>
+                <div class="service-content">
+                    Criação de páginas únicas e diretas, focadas em conversão. Desenvolvemos desde páginas curtas com formulários para captação de contatos (leads), até páginas de vendas longas e detalhadas para lançamentos de infoprodutos, prestação de serviços ou eventos.
                 </div>
             </div>
-            <div class="service-item">
-                <span class="service-name">AUTOMAÇÕES ESSENCIAIS</span>
-                <div class="service-icon">
-                    <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <div class="service-item" data-hover-target="hover-img-automacao">
+                <div class="service-header">
+                    <span class="service-name">AUTOMAÇÕES ESSENCIAIS</span>
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
+                </div>
+                <div class="service-content">
+                    Configuração de fluxos invisíveis para conectar suas ferramentas e eliminar o trabalho manual da sua equipe. Isso inclui ações como o disparo automático de mensagens no WhatsApp quando um cliente preenche um cadastro, ou a integração direta do seu site com planilhas e sistemas de CRM.
                 </div>
             </div>
-            <div class="service-item">
-                <span class="service-name">ATENDIMENTO COM IA</span>
-                <div class="service-icon">
-                    <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <div class="service-item" data-hover-target="hover-img-agente">
+                <div class="service-header">
+                    <span class="service-name">AGENTES COM IA</span>
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
+                </div>
+                <div class="service-content">
+                    Desenvolvimento e configuração de assistentes virtuais (chatbots) com Inteligência Artificial para o seu WhatsApp, Instagram ou site. Treinamos o robô com os dados exclusivos da sua empresa para que ele possa responder dúvidas, qualificar clientes e fazer agendamentos 24 horas por dia.
                 </div>
             </div>
-            <div class="service-item">
-                <span class="service-name">CONSULTORIA EM IA</span>
-                <div class="service-icon">
-                    <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <div class="service-item" data-hover-target="hover-img-consultoria">
+                <div class="service-header">
+                    <span class="service-name">CONSULTORIA EM IA</span>
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
+                </div>
+                <div class="service-content">
+                    Sessões práticas de direcionamento tecnológico para o seu negócio. Mapeamos a rotina da sua operação e ensinamos a sua equipe a implementar ferramentas de Inteligência Artificial no dia a dia para otimizar processos internos, analisar dados e acelerar a produção.
                 </div>
             </div>
         </div>
@@ -1941,58 +2083,60 @@
 
     
     <section class="services-details-section" id="secao-solucoes-detalhes">
-        
+        <div class="feature-col col-left">
+            <!-- Block 1: Desenvolvimento Web -->
+            <div class="feature-block">
+                <div class="feature-image-placeholder"></div>
+                <div class="feature-content">
+                    <h3 class="feature-title">SITES COMPLETOS</h3>
+                    <p class="feature-desc">Construímos plataformas web completas, desde sites institucionais até lojas virtuais.</p>
+                    <span class="feature-tags">Infraestrutura | Estabilidade | Posicionamento</span>
+                </div>
+            </div>
+            
+            <!-- Block 3: Automações Essenciais -->
+            <div class="feature-block">
+                <div class="feature-image-placeholder"></div>
+                <div class="feature-content">
+                    <h3 class="feature-title">AUTOMAÇÕES</h3>
+                    <p class="feature-desc">Conectamos seus sistemas para eliminar de vez o trabalho manual da equipe.</p>
+                    <span class="feature-tags">Fluxo Operacional | Sincronia | Redução de Custos</span>
+                </div>
+            </div>
 
-        <!-- Block 1: Desenvolvimento Web -->
-        <div class="feature-block">
-            <div class="feature-content">
-                <h3 class="feature-title">DESENVOLVIMENTO WEB</h3>
-                <p class="feature-desc">Construímos a sede digital da sua empresa. Um ambiente robusto, com design minimalista e arquitetura de ponta, projetado para transmitir autoridade e suportar o crescimento da sua marca.</p>
-                <span class="feature-tags">Arquitetura Web - Alta Performance - Design Profissional</span>
+            <!-- Block 5: Consultoria em IA -->
+            <div class="feature-block">
+                <div class="feature-image-placeholder"></div>
+                <div class="feature-content">
+                    <h3 class="feature-title">CONSULTORIA EM IA</h3>
+                    <p class="feature-desc">Mapeamos sua operação e guiamos a implementação estratégica de Inteligência Artificial.</p>
+                    <span class="feature-tags">Diagnóstico | Modernização | Otimização</span>
+                </div>
             </div>
-            <div class="feature-image-placeholder"></div>
-        </div>
-        
-        <!-- Block 2: Páginas de Alta Conversão -->
-        <div class="feature-block reverse">
-            <div class="feature-content right-align">
-                <h3 class="feature-title">PÁGINAS DE ALTA CONVERSÃO</h3>
-                <p class="feature-desc">Desenhamos landing pages cirúrgicas. Uma estrutura enxuta e persuasiva, criada como uma verdadeira linha de montagem com um único objetivo: transformar visitantes em clientes.</p>
-                <span class="feature-tags">Foco em Vendas - Copywriting - Otimização</span>
-            </div>
-            <div class="feature-image-placeholder"></div>
-        </div>
-
-        <!-- Block 3: Automações Essenciais -->
-        <div class="feature-block">
-            <div class="feature-content">
-                <h3 class="feature-title">AUTOMAÇÕES ESSENCIAIS</h3>
-                <p class="feature-desc">Otimizamos o tempo da sua equipe implementando as engrenagens básicas de automação. Para integrações de alta complexidade, orquestramos a execução com parceiros homologados.</p>
-                <span class="feature-tags">Otimização de Processos - Integração Inteligente</span>
-            </div>
-            <div class="feature-image-placeholder"></div>
-        </div>
-    
-        <!-- Block 4: Atendimento com IA -->
-        <div class="feature-block">
-            <div class="feature-content">
-                <h3 class="feature-title">ATENDIMENTO COM IA</h3>
-                <p class="feature-desc">Implementamos operadores virtuais inteligentes na base do seu negócio. Uma solução tecnológica direta para automatizar o seu primeiro contato e fazer sua empresa operar 24 horas por dia.</p>
-                <span class="feature-tags">Operação 24/7 - Setup Ágil - Inovação</span>
-            </div>
-            <div class="feature-image-placeholder"></div>
         </div>
 
-        <!-- Block 5: Consultoria em IA -->
-        <div class="feature-block reverse">
-            <div class="feature-content right-align">
-                <h3 class="feature-title">CONSULTORIA EM IA</h3>
-                <p class="feature-desc">Desenhamos a planta para a implementação de Inteligência Artificial no seu negócio. Mapeamos os seus gargalos e direcionamos as ferramentas certas para modernizar a sua linha de produção.</p>
-                <span class="feature-tags">Direcionamento Estratégico - Mapeamento - Inovação Prática</span>
+        <div class="feature-col col-right">
+            <!-- Block 2: Páginas de Alta Conversão -->
+            <div class="feature-block">
+                <div class="feature-image-placeholder"></div>
+                <div class="feature-content">
+                    <h3 class="feature-title">LANDING PAGES</h3>
+                    <p class="feature-desc">Desenvolvemos páginas de alta conversão para captar contatos e alavancar vendas.</p>
+                    <span class="feature-tags">Máquina de Vendas | Captação | Retorno</span>
+                </div>
             </div>
-            <div class="feature-image-placeholder"></div>
+            
+            <!-- Block 4: Atendimento com IA -->
+            <div class="feature-block">
+                <div class="feature-image-placeholder"></div>
+                <div class="feature-content">
+                    <h3 class="feature-title">AGENTES COM IA</h3>
+                    <p class="feature-desc">Assistentes virtuais inteligentes para atender e qualificar seus clientes 24 horas por dia.</p>
+                    <span class="feature-tags">Atendimento Automático | Escala | Operação 24/7</span>
+                </div>
+            </div>
         </div>
-</section>
+    </section>
     
     
     
@@ -2008,26 +2152,26 @@
             <div class="experience-content">
             <!-- Background Texts -->
             <span class="experience-bg-text" id="exp-bg-1">ROBÓTICA</span>
-            <span class="experience-bg-text" id="exp-bg-2" style="opacity: 0;">NEGÓCIOS</span>
-            <span class="experience-bg-text" id="exp-bg-3" style="opacity: 0;">FORMAÇÃO</span>
+            <span class="experience-bg-text" id="exp-bg-2">NEGÓCIOS</span>
+            <span class="experience-bg-text" id="exp-bg-3">FORMAÇÃO</span>
                 <div class="experience-title" id="exp-main-title" style="z-index: 4;"><span>NOSSA EXPERIÊNCIA</span></div>
                 
-                <!-- Images -->
-                <div class="experience-image-placeholder" id="exp-img-1" style="z-index: 2; opacity: 1; transform: translate(-60%, -50%) rotate(-55deg) scaleX(1);"></div>
-                <div class="experience-image-placeholder" id="exp-img-2" style="z-index: 2; opacity: 1; transform: translate(-60%, -50%) rotate(-55deg) scaleX(0);"></div>
-                <div class="experience-image-placeholder" id="exp-img-3" style="z-index: 2; opacity: 1; transform: translate(-60%, -50%) rotate(-55deg) scaleX(0);"></div>
+                <!-- Image -->
+                <div class="experience-image-placeholder" id="exp-main-img" style="z-index: 2;"></div>
                 
                 <!-- Info Blocks -->
                 <div class="experience-info" id="exp-info-1">
                     <p class="experience-desc">Campeões nacionais da F1 in Schools e premiados no mundial em Singapura. Uma base forjada na precisão e alta performance das competições de robótica.</p>
-                    <a href="#" class="experience-link">Veja nossa história completa</a>
                 </div>
                 <div class="experience-info" id="exp-info-2" style="opacity: 0; pointer-events: none;">
                     <p class="experience-desc">Lideramos operações reais em tecnologia, IA e seguros. Sabemos exatamente o que o seu projeto precisa porque estruturamos e escalamos negócios na prática.</p>
-                    <a href="#" class="experience-link">Veja nossa história completa</a>
                 </div>
-                <div class="experience-info" id="exp-info-3" style="opacity: 0; pointer-events: none;">
-                    <p class="experience-desc">Aliamos o raciocínio lógico da Engenharia ao desenvolvimento web avançado, construindo ecossistemas digitais com tecnologias modernas como React, TypeScript e Inteligência Artificial.</p>
+                <div class="experience-info" id="exp-info-3" style="opacity: 0; pointer-events: none; bottom: 140px;">
+                    <p class="experience-desc">Unimos a lógica da Engenharia ao desenvolvimento web para construir ecossistemas digitais com React, TypeScript e IA.</p>
+                </div>
+
+                <!-- Static Link -->
+                <div style="position: absolute; bottom: 120px; right: 120px; z-index: 4;">
                     <a href="#" class="experience-link">Veja nossa história completa</a>
                 </div>
                 
@@ -2161,6 +2305,24 @@
                     }
                     progress = Math.max(0, Math.min(1, progress));
 
+                    // Handle Main Image Full Open/Close Animation
+                    const mainImg = document.getElementById('exp-main-img');
+                    if (mainImg) {
+                        // Expand only during the active parts of each section, retract in the gaps
+                        const isExpanded = 
+                            (progress >= 0.05 && progress <= 0.28) || 
+                            (progress >= 0.38 && progress <= 0.61) || 
+                            (progress >= 0.71 && progress <= 0.95);
+                            
+                        if (isExpanded) {
+                            mainImg.style.opacity = '1';
+                            mainImg.style.transform = 'translate(-60%, -50%) rotate(-55deg) translateY(0%) scaleY(1) scaleX(1)';
+                        } else {
+                            mainImg.style.opacity = '0.15';
+                            mainImg.style.transform = 'translate(-60%, -50%) rotate(-55deg) translateY(50%) scaleY(0.01) scaleX(1)';
+                        }
+                    }
+
                     let activeIndex = 1;
                     if (progress >= 0.33 && progress < 0.66) {
                         activeIndex = 2;
@@ -2171,37 +2333,28 @@
                     for(let i = 1; i <= 3; i++) {
                         const bg = document.getElementById(`exp-bg-${i}`);
                         const info = document.getElementById(`exp-info-${i}`);
-                        const img = document.getElementById(`exp-img-${i}`);
                         
                         const isActive = (i === activeIndex);
                         
                         if (bg) {
-                            if (i === activeIndex) {
-                                bg.style.clipPath = 'inset(0 0 0 0)';
-                                bg.style.transform = 'translate(-50%, -50%) scale(1)';
-                                bg.style.opacity = '1';
+                            if (isActive) {
+                                bg.style.clipPath = 'polygon(-20% -50%, 120% -50%, 120% 150%, -20% 150%)';
+                                bg.style.transform = 'translate(-50%, -50%)';
                             } else {
-                                bg.style.clipPath = 'inset(0 100% 0 0)';
-                                bg.style.transform = 'translate(-50%, -50%) scale(0.95)';
-                                bg.style.opacity = '1'; // Keep visible so we see it erasing
+                                bg.style.clipPath = 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)';
+                                bg.style.transform = 'translate(-50%, 50%)';
                             }
                         }
                         if (info) {
-                            info.style.opacity = isActive ? '1' : '0';
-                            info.style.pointerEvents = isActive ? 'auto' : 'none';
-                            info.style.transform = isActive ? 'translateY(0)' : 'translateY(20px)';
-                        }
-                        if (img) {
-                            if (i === activeIndex) {
-                                // Active: fully visible and open sanfona
-                                img.style.opacity = '1';
-                                img.style.transform = 'translate(-60%, -50%) rotate(-55deg) scaleX(1)';
+                            if (isActive) {
+                                info.style.clipPath = 'polygon(-20% -20%, 120% -20%, 120% 120%, -20% 120%)';
+                                info.style.transform = 'translateY(0)';
                             } else {
-                                // Inactive: closed sanfona
-                                img.style.opacity = '1'; // See it closing
-                                img.style.transform = 'translate(-60%, -50%) rotate(-55deg) scaleX(0)';
+                                info.style.clipPath = 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)';
+                                info.style.transform = 'translateY(40px)';
                             }
-                            img.style.clipPath = 'none'; // remove old clip path logic
+                            info.style.opacity = '1'; // Never fade, pure mask
+                            info.style.pointerEvents = isActive ? 'auto' : 'none';
                         }
                     }
                 });
@@ -2217,6 +2370,76 @@
                     }
                 });
             }
+            
+            // Scroll Fade Animations (Load/Unload elements via scroll)
+            const fadeElements = document.querySelectorAll('.services-left-area, .services-list, .feature-content, .feature-image-placeholder, .about-title, .about-desc, .about-image-placeholder, .contact-title, .contact-subtitle, .contact-form, .contact-image-placeholder');
+            
+            fadeElements.forEach(el => {
+                el.classList.add('scroll-fade-in');
+            });
+
+            const scrollObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    } else {
+                        // Unload when scrolled out of view
+                        entry.target.classList.remove('visible');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+            fadeElements.forEach(el => scrollObserver.observe(el));
+
+            // Hover and Accordion Logic for Services
+            const srvItems = document.querySelectorAll('.service-item');
+
+            srvItems.forEach(item => {
+                // Hover logic
+                item.addEventListener('mouseenter', () => {
+                    const targetId = item.getAttribute('data-hover-target');
+                    if (targetId) {
+                        const targetImg = document.getElementById(targetId);
+                        if (targetImg) targetImg.classList.add('active');
+                    }
+                });
+                item.addEventListener('mouseleave', () => {
+                    // Only hide image if item is NOT open
+                    if (!item.classList.contains('open')) {
+                        const targetId = item.getAttribute('data-hover-target');
+                        if (targetId) {
+                            const targetImg = document.getElementById(targetId);
+                            if (targetImg) targetImg.classList.remove('active');
+                        }
+                    }
+                });
+
+                // Click logic for Accordion
+                item.addEventListener('click', () => {
+                    const isOpen = item.classList.contains('open');
+
+                    // Close all others and hide their images
+                    srvItems.forEach(other => {
+                        other.classList.remove('open');
+                        const otherTargetId = other.getAttribute('data-hover-target');
+                        if (otherTargetId) {
+                            const otherImg = document.getElementById(otherTargetId);
+                            if (otherImg) otherImg.classList.remove('active');
+                        }
+                    });
+
+                    // Toggle current
+                    if (!isOpen) {
+                        item.classList.add('open');
+                        const targetId = item.getAttribute('data-hover-target');
+                        if (targetId) {
+                            const targetImg = document.getElementById(targetId);
+                            if (targetImg) targetImg.classList.add('active');
+                        }
+                    }
+                });
+            });
+
 });
 
     // Close menu when any menu link or nav-cta is clicked
@@ -2308,7 +2531,10 @@
                 setTimeout(() => {
                     if (screen) screen.classList.add('hidden');
                     // Remove from DOM after transition
-                    setTimeout(() => { if (screen) screen.remove(); }, 900);
+                    setTimeout(() => { 
+                        if (screen) screen.remove(); 
+                        window.dispatchEvent(new Event('scroll'));
+                    }, 900);
                 }, 300);
             }
 
