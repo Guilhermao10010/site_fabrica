@@ -24,6 +24,7 @@
             height: 100%;
             scrollbar-width: none; /* Firefox */
             -ms-overflow-style: none;  /* IE and Edge */
+            scroll-behavior: smooth;
         }
         
         ::-webkit-scrollbar {
@@ -1851,7 +1852,7 @@
 
 
     
-    <section class="services-details-section" id="secao-projetos">
+    <section class="services-details-section" id="secao-solucoes-detalhes">
         
 
         <!-- Block 1: Desenvolvimento Web -->
@@ -1907,7 +1908,7 @@
     
     
     
-    <section class="video-section">
+    <section class="video-section" id="secao-projetos">
         <div class="video-placeholder">
             
         </div>
@@ -2109,18 +2110,42 @@
             }
         }
 
-        // Menu section links
+        // Menu section links — close menu first, then scroll
         document.querySelectorAll('.menu-links a').forEach(function(link) {
-            link.addEventListener('click', function() {
-                setTimeout(closeMenu, 60);
+            link.addEventListener('click', function(e) {
+                var href = link.getAttribute('href');
+                if (href && href.startsWith('#') && href.length > 1) {
+                    e.preventDefault();
+                    closeMenu();
+                    setTimeout(function() {
+                        var target = document.querySelector(href);
+                        if (target) {
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }, 400); // wait for menu close animation
+                } else {
+                    setTimeout(closeMenu, 60);
+                }
             });
         });
 
         // "Venha nos conhecer" button
         var navCta = document.getElementById('navCta');
         if (navCta) {
-            navCta.addEventListener('click', function() {
-                closeMenu();
+            navCta.addEventListener('click', function(e) {
+                var href = navCta.getAttribute('href');
+                if (href && href.startsWith('#') && href.length > 1) {
+                    e.preventDefault();
+                    closeMenu();
+                    setTimeout(function() {
+                        var target = document.querySelector(href);
+                        if (target) {
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }, 400);
+                } else {
+                    closeMenu();
+                }
             });
         }
     })();
