@@ -1254,7 +1254,7 @@
         /* ── Contact Section ── */
         .contact-section {
             position: relative;
-            z-index: 100000;
+            z-index: 10;
             background-color: var(--color-bg);
             padding: 80px 40px;
             display: flex;
@@ -1362,6 +1362,35 @@
             }
         }
 
+
+        /* ── Footer ── */
+        .site-footer {
+            background-color: var(--color-primary); /* Same dark blue as menu */
+            color: var(--color-bg);
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .site-footer .footer-logo-text {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 24px;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .site-footer p {
+            font-family: var(--font-scroll);
+            font-size: clamp(12px, 1vw, 14px);
+            opacity: 0.7;
+            letter-spacing: 0.05em;
+        }
 
         /* ── Custom Cursor ── */
         .custom-cursor {
@@ -2031,6 +2060,11 @@
         
         <div class="contact-image-placeholder"></div>
     </section>
+    
+    <footer class="site-footer">
+        <div class="footer-logo-text">FÁBRICA DE EMPRESAS</div>
+        <p>&copy; 2026 Fábrica de Empresas. Todos os direitos reservados.</p>
+    </footer>
     
     <div class="custom-cursor" id="customCursor">COMO FUNCIONA</div>
 
