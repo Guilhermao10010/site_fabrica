@@ -1102,7 +1102,7 @@
             position: relative;
             z-index: 10;
             background-color: var(--color-bg);
-            padding: 40px;
+            padding: 20px 40px; /* Reduced padding slightly to give video more space */
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -1112,8 +1112,8 @@
         .video-placeholder {
             position: relative;
             width: 100%;
-            height: calc(100vh - 80px); /* 100vh minus padding */
-            max-width: 1380px;
+            height: calc(100vh - 40px); /* 100vh minus padding */
+            max-width: 1500px; /* Increased max-width */
             background-color: #D9D9D9;
             border-radius: 20px;
             display: flex;
@@ -1126,10 +1126,10 @@
         .video-btn {
             background-color: var(--color-orange);
             color: #FFF;
-            padding: 15px 35px;
+            padding: 9px 21px; /* Decreased padding by 40% */
             font-family: var(--font-scroll);
             font-weight: 700;
-            font-size: clamp(16px, 2vw, 20px);
+            font-size: clamp(9.6px, 1.2vw, 12px); /* Decreased font-size by 40% */
             text-transform: uppercase;
             border: none;
             cursor: pointer;
@@ -1397,6 +1397,24 @@
             font-size: clamp(12px, 1vw, 14px);
             opacity: 0.7;
             letter-spacing: 0.05em;
+        }
+
+        /* ── Scroll Snapping ── */
+        html {
+            scroll-snap-type: y proximity;
+        }
+
+        .hero-wrapper,
+        .services-section,
+        .services-details-section,
+        .video-section,
+        .about-section,
+        .contact-section {
+            scroll-snap-align: center;
+        }
+
+        .experience-scroll-container {
+            scroll-snap-align: start;
         }
 
         /* ── Custom Cursor ── */
