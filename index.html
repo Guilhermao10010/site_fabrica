@@ -966,6 +966,8 @@
             z-index: 1;
             user-select: none;
             letter-spacing: 0.05em;
+            clip-path: inset(0 100% 0 0); /* Initial state: erased */
+            transition: clip-path 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1s ease, opacity 1s ease;
         }
 
         .experience-content {
@@ -989,18 +991,41 @@
             font-size: clamp(24px, 3vw, 35px);
             color: var(--color-black);
             z-index: 3;
+            transform: translateX(-100vw);
+            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .experience-title.visible {
+            transform: translateX(0);
+        }
+
+        .experience-title span {
+            display: inline-block;
+        }
+
+        .experience-title.visible span {
+            animation: wave-text-loop 3s infinite ease-in-out;
+            animation-delay: 1.2s; /* wait for entrance */
+        }
+
+        @keyframes wave-text-loop {
+            0%, 80% { transform: translateY(0); }
+            85% { transform: translateY(-10px); }
+            90% { transform: translateY(0); }
+            95% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
         }
 
         .experience-image-placeholder {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-60%, -50%) rotate(-55deg);
-            width: clamp(240px, 48vw, 720px); /* Reduced by 20% */
-            height: clamp(120px, 24vw, 280px); /* Reduced by 20% */
+            transform: translate(-60%, -50%) rotate(-55deg) scaleX(0); /* Initial closed sanfona */
+            width: clamp(240px, 48vw, 720px);
+            height: clamp(84px, 16.8vw, 196px); /* Reduced by 30% from 120/24vw/280 */
             background-color: #D9D9D9;
             box-shadow: 0 30px 60px rgba(0,0,0,0.1);
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 2;
         }
         
@@ -1985,12 +2010,12 @@
             <span class="experience-bg-text" id="exp-bg-1">ROBÓTICA</span>
             <span class="experience-bg-text" id="exp-bg-2" style="opacity: 0;">NEGÓCIOS</span>
             <span class="experience-bg-text" id="exp-bg-3" style="opacity: 0;">FORMAÇÃO</span>
-                <div class="experience-title" style="z-index: 4; position: absolute; top: 120px; left: 105px;">NOSSA EXPERIÊNCIA</div>
+                <div class="experience-title" id="exp-main-title" style="z-index: 4;"><span>NOSSA EXPERIÊNCIA</span></div>
                 
                 <!-- Images -->
-                <div class="experience-image-placeholder" id="exp-img-1" style="z-index: 2; clip-path: inset(0 0 0 0); opacity: 1; transform: translate(-60%, -50%) rotate(-55deg);"></div>
-                <div class="experience-image-placeholder" id="exp-img-2" style="z-index: 2; clip-path: inset(0 100% 0 0); opacity: 0; transform: translate(-60%, -50%) rotate(-55deg);"></div>
-                <div class="experience-image-placeholder" id="exp-img-3" style="z-index: 2; clip-path: inset(0 100% 0 0); opacity: 0; transform: translate(-60%, -50%) rotate(-55deg);"></div>
+                <div class="experience-image-placeholder" id="exp-img-1" style="z-index: 2; opacity: 1; transform: translate(-60%, -50%) rotate(-55deg) scaleX(1);"></div>
+                <div class="experience-image-placeholder" id="exp-img-2" style="z-index: 2; opacity: 1; transform: translate(-60%, -50%) rotate(-55deg) scaleX(0);"></div>
+                <div class="experience-image-placeholder" id="exp-img-3" style="z-index: 2; opacity: 1; transform: translate(-60%, -50%) rotate(-55deg) scaleX(0);"></div>
                 
                 <!-- Info Blocks -->
                 <div class="experience-info" id="exp-info-1">
@@ -2151,8 +2176,15 @@
                         const isActive = (i === activeIndex);
                         
                         if (bg) {
-                            bg.style.opacity = isActive ? '1' : '0';
-                            bg.style.transform = isActive ? 'translate(-50%, -50%) scale(1)' : 'translate(-50%, -50%) scale(0.95)';
+                            if (i === activeIndex) {
+                                bg.style.clipPath = 'inset(0 0 0 0)';
+                                bg.style.transform = 'translate(-50%, -50%) scale(1)';
+                                bg.style.opacity = '1';
+                            } else {
+                                bg.style.clipPath = 'inset(0 100% 0 0)';
+                                bg.style.transform = 'translate(-50%, -50%) scale(0.95)';
+                                bg.style.opacity = '1'; // Keep visible so we see it erasing
+                            }
                         }
                         if (info) {
                             info.style.opacity = isActive ? '1' : '0';
@@ -2161,22 +2193,27 @@
                         }
                         if (img) {
                             if (i === activeIndex) {
-                                // Active: fully visible and positioned centrally
+                                // Active: fully visible and open sanfona
                                 img.style.opacity = '1';
-                                img.style.clipPath = 'inset(0 0 0 0)';
-                                img.style.transform = 'translate(-60%, -50%) rotate(-55deg)';
-                            } else if (i < activeIndex) {
-                                // Past: slides out to the left and fades
-                                img.style.opacity = '0';
-                                img.style.clipPath = 'inset(0 0 0 0)';
-                                img.style.transform = 'translate(-120%, -50%) rotate(-55deg)';
+                                img.style.transform = 'translate(-60%, -50%) rotate(-55deg) scaleX(1)';
                             } else {
-                                // Future: waits to emerge from a line (clip-path wipe)
-                                img.style.opacity = '1'; // Must be 1 so clip-path reveal works
-                                img.style.clipPath = 'inset(0 100% 0 0)';
-                                img.style.transform = 'translate(-60%, -50%) rotate(-55deg)';
+                                // Inactive: closed sanfona
+                                img.style.opacity = '1'; // See it closing
+                                img.style.transform = 'translate(-60%, -50%) rotate(-55deg) scaleX(0)';
                             }
+                            img.style.clipPath = 'none'; // remove old clip path logic
                         }
+                    }
+                });
+            }
+            
+            // Experience Title Entrance
+            const expTitle = document.getElementById('exp-main-title');
+            if (expContainer && expTitle) {
+                window.addEventListener('scroll', () => {
+                    const rect = expContainer.getBoundingClientRect();
+                    if (rect.top < window.innerHeight * 0.8) {
+                        expTitle.classList.add('visible');
                     }
                 });
             }
