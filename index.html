@@ -993,17 +993,17 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-60%, -50%) rotate(-45deg);
-            width: clamp(300px, 60vw, 900px);
-            height: clamp(150px, 30vw, 350px);
+            transform: translate(-60%, -50%) rotate(-55deg);
+            width: clamp(240px, 48vw, 720px); /* Reduced by 20% */
+            height: clamp(120px, 24vw, 280px); /* Reduced by 20% */
             background-color: #D9D9D9;
             box-shadow: 0 30px 60px rgba(0,0,0,0.1);
-            transition: transform 0.4s ease;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 2;
         }
         
         .experience-image-placeholder:hover {
-            transform: translate(-60%, -50%) rotate(-40deg) scale(1.02);
+            transform: translate(-60%, -50%) rotate(-55deg) scale(1.02) !important;
         }
 
         .experience-info {
@@ -1075,7 +1075,7 @@
                 position: relative;
                 top: auto;
                 left: auto;
-                transform: rotate(-15deg);
+                transform: rotate(-55deg);
                 margin: 0 auto 60px;
                 width: 90%;
                 height: 200px;
@@ -1986,9 +1986,9 @@
                 <div class="experience-title" style="z-index: 4; position: absolute; top: 120px; left: 105px;">NOSSA EXPERIÊNCIA</div>
                 
                 <!-- Images -->
-                <div class="experience-image-placeholder" id="exp-img-1" style="z-index: 2;"></div>
-                <div class="experience-image-placeholder" id="exp-img-2" style="z-index: 2; opacity: 0; transform: translate(-60%, -50%) rotate(-40deg) scale(0.95);"></div>
-                <div class="experience-image-placeholder" id="exp-img-3" style="z-index: 2; opacity: 0; transform: translate(-60%, -50%) rotate(-50deg) scale(0.95);"></div>
+                <div class="experience-image-placeholder" id="exp-img-1" style="z-index: 2; clip-path: inset(0 0 0 0); opacity: 1; transform: translate(-60%, -50%) rotate(-55deg);"></div>
+                <div class="experience-image-placeholder" id="exp-img-2" style="z-index: 2; clip-path: inset(0 100% 0 0); opacity: 0; transform: translate(-60%, -50%) rotate(-55deg);"></div>
+                <div class="experience-image-placeholder" id="exp-img-3" style="z-index: 2; clip-path: inset(0 100% 0 0); opacity: 0; transform: translate(-60%, -50%) rotate(-55deg);"></div>
                 
                 <!-- Info Blocks -->
                 <div class="experience-info" id="exp-info-1">
@@ -2158,8 +2158,22 @@
                             info.style.transform = isActive ? 'translateY(0)' : 'translateY(20px)';
                         }
                         if (img) {
-                            img.style.opacity = isActive ? '1' : '0';
-                            img.style.transform = isActive ? 'translate(-60%, -50%) rotate(-45deg) scale(1)' : 'translate(-60%, -50%) rotate(-40deg) scale(0.95)';
+                            if (i === activeIndex) {
+                                // Active: fully visible and positioned centrally
+                                img.style.opacity = '1';
+                                img.style.clipPath = 'inset(0 0 0 0)';
+                                img.style.transform = 'translate(-60%, -50%) rotate(-55deg)';
+                            } else if (i < activeIndex) {
+                                // Past: slides out to the left and fades
+                                img.style.opacity = '0';
+                                img.style.clipPath = 'inset(0 0 0 0)';
+                                img.style.transform = 'translate(-120%, -50%) rotate(-55deg)';
+                            } else {
+                                // Future: waits to emerge from a line (clip-path wipe)
+                                img.style.opacity = '1'; // Must be 1 so clip-path reveal works
+                                img.style.clipPath = 'inset(0 100% 0 0)';
+                                img.style.transform = 'translate(-60%, -50%) rotate(-55deg)';
+                            }
                         }
                     }
                 });
