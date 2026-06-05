@@ -249,6 +249,14 @@
             transition: width 0.3s ease;
         }
 
+        /* Logo link */
+        .logo-link {
+            display: inline-flex;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+        .logo-link:hover { opacity: 0.85; }
+
         .menu-btn {
             width: 42px;
             height: 42px;
@@ -1447,7 +1455,7 @@
     <!-- Script do Spline Viewer -->
     <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.54/build/spline-viewer.js"></script>
 </head>
-<body>
+<body id="top">
 
     <div class="menu-overlay" id="menuOverlay">
         <svg class="menu-bg-line" viewBox="0 0 771 1031" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
@@ -1463,10 +1471,10 @@
 
         <div class="menu-content">
             <nav class="menu-links">
-                <a href="#" data-number="01" data-text="SOLUÇÕES">SOLUÇÕES</a>
-                <a href="#" data-number="02" data-text="PROJETOS">PROJETOS</a>
-                <a href="#" data-number="03" data-text="SOBRE NÓS">SOBRE NÓS</a>
-                <a href="#" data-number="04" data-text="CONTATO">CONTATO</a>
+                <a href="#secao-solucoes" data-number="01" data-text="SOLUÇÕES">SOLUÇÕES</a>
+                <a href="#secao-projetos" data-number="02" data-text="PROJETOS">PROJETOS</a>
+                <a href="#secao-sobre" data-number="03" data-text="SOBRE NÓS">SOBRE NÓS</a>
+                <a href="#secao-contato" data-number="04" data-text="CONTATO">CONTATO</a>
             </nav>
             <div class="menu-info">
                 <div class="contact-details">
@@ -1743,6 +1751,7 @@
 
     <header class="site-header">
         <!-- Logo -->
+        <a href="#top" class="logo-link" aria-label="Voltar ao topo">
         <svg class="logo" width="115" height="60" viewBox="0 0 164 86" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Fábrica de Empresas logo">
             <g clip-path="url(#logo-clip)">
                 <path d="M122.521 1.58157C99.3507 1.58157 80.5708 20.4721 80.5708 43.7783C80.5708 67.0845 99.3507 85.975 122.521 85.975C145.69 85.975 164.47 67.0845 164.47 43.7783C164.47 20.4721 145.686 1.58157 122.521 1.58157ZM115.054 63.9282H105.857V37.6517H106.687C111.304 37.6517 115.051 41.4207 115.051 46.0701V63.9304L115.054 63.9282ZM137.414 40.9623C137.414 45.6367 133.651 49.4239 129.004 49.4239H118.71V43.5673C118.71 41.6907 120.22 40.1727 122.085 40.1727H137.414V40.96V40.9623ZM143.996 26.6486C143.996 31.6226 139.988 35.6548 135.045 35.6548H115.051C109.973 35.6548 105.854 31.5137 105.854 26.4036H143.994V26.6486H143.996Z" fill="#222852"/>
@@ -1755,6 +1764,7 @@
                 </clipPath>
             </defs>
         </svg>
+        </a>
 
         <nav class="header-nav">
             <button id="muteBtn" class="mute-btn" style="display: none;" aria-label="Desabilitar som">
@@ -1764,7 +1774,7 @@
                     <line x1="17" y1="9" x2="23" y2="15"></line>
                 </svg>
             </button>
-            <a href="#" class="nav-cta">
+            <a href="#secao-solucoes" class="nav-cta" id="navCta">
                 <span class="nav-cta-text">VENHA NOS CONHECER</span>
                 <span class="nav-cta-underline"></span>
             </a>
@@ -1802,7 +1812,7 @@
     </div>
 
 
-    <section class="services-section">
+    <section class="services-section" id="secao-solucoes">
         <h2 class="services-title">Tudo aquilo que construímos para o seu negócio.</h2>
         <div class="services-list">
             <div class="service-item">
@@ -1841,7 +1851,7 @@
 
 
     
-    <section class="services-details-section">
+    <section class="services-details-section" id="secao-projetos">
         
 
         <!-- Block 1: Desenvolvimento Web -->
@@ -1950,7 +1960,7 @@
     
     
     
-    <section class="about-section">
+    <section class="about-section" id="secao-sobre">
         <h2 class="about-main-title">SOBRE</h2>
         
         <!-- Block 1 -->
@@ -1997,7 +2007,7 @@
     </section>
     
     
-    <section class="contact-section">
+    <section class="contact-section" id="secao-contato">
         <div class="contact-content">
             <h2 class="contact-title">VAMOS CONVERSAR</h2>
             <p class="contact-subtitle">Vamos construir juntos o seu negócio.</p>
@@ -2084,6 +2094,36 @@
                 });
             }
 });
+
+    // Close menu when any menu link or nav-cta is clicked
+    (function() {
+        function closeMenu() {
+            const overlay = document.getElementById('menuOverlay');
+            const btn = document.querySelector('.menu-btn');
+            if (!overlay) return;
+            overlay.classList.remove('open');
+            document.body.classList.remove('menu-open');
+            if (btn) {
+                btn.setAttribute('aria-label', 'Abrir menu');
+                btn.classList.remove('is-open');
+            }
+        }
+
+        // Menu section links
+        document.querySelectorAll('.menu-links a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                setTimeout(closeMenu, 60);
+            });
+        });
+
+        // "Venha nos conhecer" button
+        var navCta = document.getElementById('navCta');
+        if (navCta) {
+            navCta.addEventListener('click', function() {
+                closeMenu();
+            });
+        }
+    })();
     </script>
 
     <!-- Loading Screen JS -->
