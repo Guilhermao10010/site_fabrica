@@ -942,12 +942,13 @@
             flex-direction: column;
             gap: 20px;
             padding: 0;
-            width: 100%;
+            width: 90%;
+            margin: 0 auto;
             text-align: left;
         }
 
         .feature-title {
-            font-size: clamp(28px, 3vw, 40px);
+            font-size: clamp(25px, 2.8vw, 37px);
             font-weight: 600;
             color: var(--color-black);
             font-family: var(--font-heading);
@@ -956,7 +957,7 @@
         }
 
         .feature-desc {
-            font-size: clamp(16px, 1.2vw, 18px);
+            font-size: clamp(13px, 1.1vw, 15px);
             font-weight: 400;
             color: rgba(0,0,0,0.7);
             font-family: var(--font-scroll);
@@ -964,24 +965,44 @@
         }
 
         .feature-tags {
-            font-size: clamp(14px, 1vw, 16px);
+            font-size: clamp(11px, 0.9vw, 13px);
             font-weight: 600;
             color: var(--color-orange);
             font-family: var(--font-scroll);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .feature-block:hover .feature-tags {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .feature-image-placeholder {
-            width: 100%;
-            aspect-ratio: 4 / 3;
+            width: 90%;
+            margin: 0 auto;
+            aspect-ratio: 4 / 4.8;
             background-color: #d9d9d9;
             border-radius: 12px;
             background-size: cover;
             background-position: center;
-            transition: transform 0.4s ease;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .feature-image-placeholder:hover {
-            transform: scale(1.02);
+            transform: scale(1.03) !important;
+        }
+
+        .feature-image-placeholder.scroll-fade-in {
+            opacity: 0;
+            transform: scale(0.6);
+            transform-origin: center center;
+        }
+
+        .feature-image-placeholder.scroll-fade-in.visible {
+            opacity: 1;
+            transform: scale(1);
         }
 
         @media (max-width: 900px) {
@@ -1273,7 +1294,7 @@
             position: relative;
             z-index: 10;
             background-color: var(--color-bg);
-            padding: 100px 0; /* Remove lateral padding so images can bleed */
+            padding: 100px 40px; 
             display: flex;
             flex-direction: column;
             gap: 120px;
@@ -1296,27 +1317,29 @@
             z-index: 20;
             display: flex;
             align-items: flex-start;
-            justify-content: flex-start;
-            gap: 30px;
-            flex-direction: column-reverse;
+            justify-content: space-between;
+            gap: 60px;
+            flex-direction: row;
         }
 
         .about-block.reverse {
-            flex-direction: column-reverse;
+            flex-direction: row-reverse;
         }
 
         .about-content {
             display: flex;
             flex-direction: column;
             gap: 20px;
-            max-width: 60%;
+            max-width: 45%;
             width: 100%;
             padding: 0;
+            text-align: left;
+            align-items: flex-start;
         }
 
         .about-content.right-align {
-            text-align: left;
-            align-items: flex-start;
+            text-align: right;
+            align-items: flex-end;
             margin-left: 0;
         }
 
@@ -1339,8 +1362,9 @@
         .about-image-placeholder {
             height: 450px;
             background-color: #D9D9D9;
-            width: 60%;
-            max-width: 60%;
+            width: 50%;
+            max-width: 50%;
+            border-radius: 12px;
             transition: transform 0.3s ease;
         }
         
@@ -1394,74 +1418,216 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            max-width: 600px;
-            padding: 40px 0;
+            max-width: 550px;
+            padding: 68px 0 28px 0;
+        }
+
+        @keyframes tw-char-in {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tw-char {
+            opacity: 0;
+            display: inline-block;
+        }
+        
+        .visible .tw-char {
+            animation: tw-char-in 0.1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .typewriter-text.scroll-fade-in {
+            opacity: 1 !important;
+            transform: none !important;
         }
 
         .contact-title {
-            font-size: clamp(40px, 5vw, 60px);
+            font-size: clamp(36px, 4.5vw, 55px);
             font-weight: 700;
             color: var(--color-black);
             font-family: var(--font-scroll);
             line-height: 1.1;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
             text-transform: uppercase;
         }
 
         .contact-subtitle {
-            font-size: clamp(18px, 2.5vw, 30px);
-            font-weight: 400;
+            font-size: clamp(13px, 1.75vw, 21px);
+            font-weight: 700;
             color: var(--color-black);
             font-family: var(--font-scroll);
-            margin-bottom: 80px;
+            margin-bottom: 56px;
         }
 
         .contact-form {
             display: flex;
             flex-direction: column;
-            gap: 60px;
+            gap: 42px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 40px;
+            width: 100%;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: clamp(12px, 1vw, 15px);
+            color: var(--color-black);
+            opacity: 0.85;
+            font-family: var(--font-scroll);
+            font-weight: 600;
+            text-transform: uppercase;
         }
 
         .form-input {
             width: 100%;
             background: transparent;
             border: none;
-            border-bottom: 2px solid var(--color-black);
-            padding: 10px 0;
-            font-size: clamp(18px, 1.5vw, 24px);
+            border-bottom: 2px solid rgba(238, 115, 27, 0.3);
+            padding: 7px 0;
+            font-size: clamp(13px, 1.05vw, 17px);
             font-family: var(--font-scroll);
             color: var(--color-black);
+            font-weight: 700;
             outline: none;
-            transition: border-color 0.3s;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:hover {
+            border-bottom-color: var(--color-orange);
+            background-color: rgba(238, 115, 27, 0.03);
         }
 
         .form-input::placeholder {
-            color: rgba(0, 0, 0, 0.5);
-            font-weight: 400;
+            color: rgba(0, 0, 0, 0.15);
+            font-weight: 500;
+        }
+
+        select.form-input:invalid {
+            color: rgba(0, 0, 0, 0.15);
+            font-weight: 500;
+        }
+
+        select.form-input option {
+            color: var(--color-black);
+            font-weight: 500;
+            background-color: var(--color-bg);
+            padding: 10px;
+        }
+
+        select.form-input option:checked,
+        select.form-input option:hover,
+        select.form-input option:focus {
+            background-color: var(--color-orange) !important;
+            color: #FFF !important;
+        }
+
+        select.form-input {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: none;
+            outline: none;
+            color: transparent;
+        }
+
+        .select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .select-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: rgba(0, 0, 0, 0.15); /* placeholder color */
+            font-weight: 500;
+        }
+
+        .select-overlay.has-value {
+            color: var(--color-black);
+        }
+
+        .select-text {
+            display: inline-block;
+        }
+
+        .select-arrow {
+            width: 24px;
+            height: 24px;
+            fill: #000;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .select-char-jump {
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .select-wrapper:hover .select-char-jump {
+            transform: translateY(-4px);
+        }
+
+        .select-wrapper:hover .select-arrow {
+            transform: rotate(360deg);
         }
 
         .form-input:focus {
             border-bottom-color: var(--color-orange);
+            background-color: transparent;
         }
 
         .submit-btn {
-            background-color: var(--color-orange);
-            color: #FFF;
-            padding: 15px 35px;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            background: transparent;
+            color: var(--color-black);
             font-family: var(--font-scroll);
-            font-weight: 700;
-            font-size: 20px;
-            text-transform: uppercase;
+            font-weight: 500;
+            font-size: 16px;
+            padding-left: 24px;
+            padding-right: 16px;
+            min-height: 48px;
             border: none;
             cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s;
+            transition: opacity 0.2s, color 0.3s;
             align-self: flex-start;
             margin-top: 20px;
+            z-index: 1;
         }
 
-        .submit-btn:hover {
-            transform: scale(1.05);
-            opacity: 0.9;
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            background-color: rgba(238, 115, 27, 0.2);
+            border-radius: 24px;
+            z-index: -1;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .submit-btn:hover::before {
+            width: 100%;
         }
 
         .contact-image-placeholder {
@@ -1471,6 +1637,28 @@
             max-width: 560px;
             border-radius: 8px;
             min-height: 600px;
+            margin-top: -30px;
+            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .contact-image-placeholder.scroll-fade-in {
+            opacity: 0;
+            transform: scaleY(0.2);
+            transform-origin: top center;
+        }
+
+        .contact-image-placeholder.scroll-fade-in.visible {
+            opacity: 1;
+            transform: scaleY(1);
+        }
+
+        .btn-wave-text span {
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .submit-btn:hover .btn-wave-text span {
+            transform: translateY(-4px);
         }
 
         @media (max-width: 900px) {
@@ -1478,9 +1666,17 @@
                 flex-direction: column;
                 padding: 60px 20px;
             }
-            .contact-image-placeholder {
-                min-height: 400px;
+            .contact-content {
                 max-width: 100%;
+                padding: 0;
+            }
+            .contact-image-placeholder {
+                min-height: 300px;
+                max-width: 100%;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 42px;
             }
             .contact-subtitle {
                 margin-bottom: 40px;
@@ -1490,24 +1686,122 @@
 
         /* ── Footer ── */
         .site-footer {
-            background-color: #212853; /* Same dark blue as menu */
+            background-color: #212853;
             color: var(--color-bg);
-            padding: 60px 40px;
+            padding: 100px 60px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            text-align: center;
+            justify-content: space-between;
+            align-items: flex-start;
             position: relative;
             z-index: 10;
         }
 
-        .site-footer .footer-logo-text {
-            font-family: var(--font-heading);
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            max-width: 400px;
+        }
+
+        .footer-tagline {
+            font-size: clamp(24px, 3vw, 32px);
+            font-family: var(--font-scroll);
+            font-weight: 500;
+            line-height: 1.3;
+            color: #fff;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            color: #fff;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .social-link:hover {
+            opacity: 1;
+        }
+
+        .footer-right {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-right: 60px; /* Space for scroll text if any */
+        }
+
+        .footer-col-title {
+            font-size: 12px;
+            font-family: var(--font-scroll);
             font-weight: 700;
-            font-size: 24px;
-            letter-spacing: 0.1em;
-            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        .footer-contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .footer-explore-links {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .footer-link {
+            color: #fff;
+            text-decoration: none;
+            font-family: var(--font-thin);
+            font-size: 16px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-link-orange {
+            font-size: 16px;
+            color: var(--color-orange);
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            font-family: var(--font-thin);
+            transition: opacity 0.3s;
+        }
+
+        .footer-link-orange:hover {
+            opacity: 0.8;
+        }
+
+        .footer-address {
+            margin-top: 30px;
+            font-family: var(--font-thin);
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .site-footer {
+                flex-direction: column;
+                padding: 60px 30px;
+                gap: 60px;
+            }
+            .footer-right {
+                flex-direction: column;
+                gap: 50px;
+                margin-right: 0;
+            }
         }
 
         .site-footer p {
@@ -2246,15 +2540,47 @@
     
     <section class="contact-section" id="secao-contato">
         <div class="contact-content">
-            <h2 class="contact-title">VAMOS CONVERSAR</h2>
-            <p class="contact-subtitle">Vamos construir juntos o seu negócio.</p>
+            <h2 class="contact-title typewriter-text">VAMOS CONVERSAR</h2>
+            <p class="contact-subtitle typewriter-text">Vamos construir juntos o seu negócio.</p>
             
             <form class="contact-form" onsubmit="event.preventDefault();">
-                <input type="text" class="form-input" placeholder="NOME" required>
-                <input type="email" class="form-input" placeholder="EMAIL" required>
-                <input type="text" class="form-input" placeholder="SERVIÇOS" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Nome</label>
+                        <input type="text" class="form-input" placeholder="Ex: João da Silva" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" placeholder="seu@email.com" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Serviços</label>
+                        <div class="select-wrapper">
+                            <select class="form-input" required id="service-select">
+                                <option value="" disabled selected hidden>Escolha um serviço</option>
+                                <option value="sites">Sites Completos</option>
+                                <option value="landing">Landing Pages</option>
+                                <option value="automacoes">Automações</option>
+                                <option value="agentes">Agentes com IA</option>
+                                <option value="consultoria">Consultoria em IA</option>
+                            </select>
+                            <div class="select-overlay">
+                                <div class="select-text" id="select-overlay-text">
+                                    <span class="select-char-jump">E</span>scolha um serviç<span class="select-char-jump">o</span>
+                                </div>
+                                <svg class="select-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">WhatsApp / Telefone</label>
+                        <input type="tel" class="form-input" placeholder="(11) 99999-9999" required>
+                    </div>
+                </div>
                 
-                <button type="submit" class="submit-btn">ENVIAR</button>
+                <button type="submit" class="submit-btn"><span class="btn-wave-text">Enviar mensagem</span></button>
             </form>
         </div>
         
@@ -2262,8 +2588,66 @@
     </section>
     
     <footer class="site-footer">
-        <div class="footer-logo-text">FÁBRICA DE EMPRESAS</div>
-        <p>&copy; 2026 Fábrica de Empresas. Todos os direitos reservados.</p>
+        <div class="footer-left">
+            <svg class="logo" width="90" height="47" viewBox="0 0 164 86" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Fábrica de Empresas logo">
+                <g clip-path="url(#logo-clip-footer)">
+                    <path d="M122.521 1.58157C99.3507 1.58157 80.5708 20.4721 80.5708 43.7783C80.5708 67.0845 99.3507 85.975 122.521 85.975C145.69 85.975 164.47 67.0845 164.47 43.7783C164.47 20.4721 145.686 1.58157 122.521 1.58157ZM115.054 63.9282H105.857V37.6517H106.687C111.304 37.6517 115.051 41.4207 115.051 46.0701V63.9304L115.054 63.9282ZM137.414 40.9623C137.414 45.6367 133.651 49.4239 129.004 49.4239H118.71V43.5673C118.71 41.6907 120.22 40.1727 122.085 40.1727H137.414V40.96V40.9623ZM143.996 26.6486C143.996 31.6226 139.988 35.6548 135.045 35.6548H115.051C109.973 35.6548 105.854 31.5137 105.854 26.4036H143.994V26.6486H143.996Z" fill="#FFFFFF"/>
+                    <path d="M71.0438 43.7783V85.975C48.0319 85.975 29.0941 66.9257 29.0941 43.7783C29.0941 20.6309 48.0319 1.58157 71.0438 1.58157V43.7783Z" fill="#EE731B"/>
+                    <path d="M19.5672 43.7783V67.8379C8.89028 67.8379 0.10376 56.9779 0.10376 43.7783C0.10376 30.5788 8.89028 19.7188 19.5672 19.7188V43.7783Z" fill="#FFFFFF"/>
+                </g>
+                <defs>
+                    <clipPath id="logo-clip-footer">
+                        <rect width="164" height="86" fill="white"/>
+                    </clipPath>
+                </defs>
+            </svg>
+            <h2 class="footer-tagline">Construindo grandes coisas<br>no mercado digital.</h2>
+            <div class="footer-socials">
+                <a href="#" class="social-link" aria-label="Instagram">
+                    <svg viewBox="0 0 42 42" fill="none" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 3.78164C26.6109 3.78164 27.2754 3.80625 29.482 3.90469C31.5328 3.99492 32.6402 4.33945 33.3785 4.62656C34.3547 5.00391 35.0602 5.46328 35.7902 6.19336C36.5285 6.93164 36.9797 7.62891 37.357 8.60508C37.6441 9.34336 37.9887 10.459 38.0789 12.5016C38.1773 14.7164 38.202 15.3809 38.202 20.9836C38.202 26.5945 38.1773 27.259 38.0789 29.4656C37.9887 31.5164 37.6441 32.6238 37.357 33.3621C36.9797 34.3383 36.5203 35.0438 35.7902 35.7738C35.052 36.5121 34.3547 36.9633 33.3785 37.3406C32.6402 37.6277 31.5246 37.9723 29.482 38.0625C27.2672 38.1609 26.6027 38.1855 21 38.1855C15.3891 38.1855 14.7246 38.1609 12.518 38.0625C10.4672 37.9723 9.35977 37.6277 8.62149 37.3406C7.64531 36.9633 6.93984 36.5039 6.20977 35.7738C5.47148 35.0355 5.02031 34.3383 4.64297 33.3621C4.35586 32.6238 4.01133 31.5082 3.92109 29.4656C3.82266 27.2508 3.79805 26.5863 3.79805 20.9836C3.79805 15.3727 3.82266 14.7082 3.92109 12.5016C4.01133 10.4508 4.35586 9.34336 4.64297 8.60508C5.02031 7.62891 5.47969 6.92344 6.20977 6.19336C6.94805 5.45508 7.64531 5.00391 8.62149 4.62656C9.35977 4.33945 10.4754 3.99492 12.518 3.90469C14.7246 3.80625 15.3891 3.78164 21 3.78164ZM21 0C15.2988 0 14.5852 0.0246094 12.3457 0.123047C10.1145 0.221484 8.58047 0.582422 7.25156 1.09922C5.86523 1.64062 4.69219 2.3543 3.52734 3.52734C2.3543 4.69219 1.64063 5.86524 1.09922 7.24336C0.582422 8.58047 0.221484 10.1062 0.123047 12.3375C0.0246094 14.5852 0 15.2988 0 21C0 26.7012 0.0246094 27.4148 0.123047 29.6543C0.221484 31.8855 0.582422 33.4195 1.09922 34.7484C1.64063 36.1348 2.3543 37.3078 3.52734 38.4727C4.69219 39.6375 5.86524 40.3594 7.24336 40.8926C8.58047 41.4094 10.1063 41.7703 12.3375 41.8687C14.577 41.9672 15.2906 41.9918 20.9918 41.9918C26.693 41.9918 27.4066 41.9672 29.6461 41.8687C31.8773 41.7703 33.4113 41.4094 34.7402 40.8926C36.1184 40.3594 37.2914 39.6375 38.4563 38.4727C39.6211 37.3078 40.343 36.1348 40.8762 34.7566C41.393 33.4195 41.7539 31.8938 41.8523 29.6625C41.9508 27.423 41.9754 26.7094 41.9754 21.0082C41.9754 15.307 41.9508 14.5934 41.8523 12.3539C41.7539 10.1227 41.393 8.58867 40.8762 7.25977C40.3594 5.86523 39.6457 4.69219 38.4727 3.52734C37.3078 2.3625 36.1348 1.64062 34.7566 1.10742C33.4195 0.590625 31.8938 0.229688 29.6625 0.13125C27.4148 0.0246094 26.7012 0 21 0Z" fill="white"/>
+                        <path d="M21 10.2129C15.0445 10.2129 10.2129 15.0445 10.2129 21C10.2129 26.9555 15.0445 31.7871 21 31.7871C26.9555 31.7871 31.7871 26.9555 31.7871 21C31.7871 15.0445 26.9555 10.2129 21 10.2129ZM21 27.9973C17.1363 27.9973 14.0027 24.8637 14.0027 21C14.0027 17.1363 17.1363 14.0027 21 14.0027C24.8637 14.0027 27.9973 17.1363 27.9973 21C27.9973 24.8637 24.8637 27.9973 21 27.9973Z" fill="white"/>
+                        <path d="M34.732 9.78631C34.732 11.1808 33.6 12.3047 32.2137 12.3047C30.8191 12.3047 29.6953 11.1726 29.6953 9.78631C29.6953 8.39177 30.8273 7.26794 32.2137 7.26794C33.6 7.26794 34.732 8.39998 34.732 9.78631Z" fill="white"/>
+                    </svg>
+                </a>
+                <a href="#" class="social-link" aria-label="LinkedIn">
+                    <svg viewBox="0 0 42 42" fill="none" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M38.891 0H3.10078C1.38633 0 0 1.35352 0 3.02695V38.9648C0 40.6383 1.38633 42 3.10078 42H38.891C40.6055 42 42 40.6383 42 38.973V3.02695C42 1.35352 40.6055 0 38.891 0ZM12.4605 35.7902H6.22617V15.7418H12.4605V35.7902ZM9.34336 13.0102C7.3418 13.0102 5.72578 11.3941 5.72578 9.40078C5.72578 7.40742 7.3418 5.79141 9.34336 5.79141C11.3367 5.79141 12.9527 7.40742 12.9527 9.40078C12.9527 11.3859 11.3367 13.0102 9.34336 13.0102ZM35.7902 35.7902H29.5641V26.0449C29.5641 23.7234 29.523 20.7293 26.3238 20.7293C23.0836 20.7293 22.5914 23.2641 22.5914 25.8809V35.7902H16.3734V15.7418H22.3453V18.4816H22.4273C23.2559 16.9066 25.2902 15.2414 28.3172 15.2414C34.6254 15.2414 35.7902 19.3922 35.7902 24.7898V35.7902Z" fill="white"/>
+                    </svg>
+                </a>
+                <a href="#" class="social-link" aria-label="Twitter">
+                    <svg viewBox="0 0 42 42" fill="none" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M41.5967 17.104H21.4473V25.1778H33.0252C32.8391 26.3205 32.4212 27.4445 31.8092 28.4695C31.108 29.6438 30.2412 30.5378 29.3527 31.2187C26.6912 33.2581 23.5882 33.6751 21.4333 33.6751C15.9896 33.6751 11.3383 30.1568 9.5377 25.376C9.46504 25.2025 9.41678 25.0233 9.35803 24.8462C8.96013 23.6294 8.74273 22.3407 8.74273 21.0013C8.74273 19.6074 8.97815 18.273 9.40741 17.0128C11.1006 12.0425 15.8567 8.33011 21.4372 8.33011C22.5596 8.33011 23.6406 8.46371 24.6656 8.73021C27.0082 9.33923 28.6652 10.5387 29.6806 11.4875L35.8072 5.48758C32.0804 2.07054 27.2222 5.16631e-09 21.427 5.16631e-09C16.7941 -9.97137e-05 12.5169 1.44337 9.0118 3.88287C6.16929 5.86125 3.83804 8.51004 2.26472 11.5863C0.801309 14.4387 0 17.5996 0 20.9982C0 24.3969 0.802534 27.5907 2.26595 30.4167V30.4357C3.81167 33.4359 6.07206 36.019 8.81931 37.9883C11.2193 39.7087 15.5228 42 21.427 42C24.8224 42 27.8316 41.3878 30.4855 40.2406C32.3999 39.413 34.0962 38.3336 35.6319 36.9463C37.6611 35.1133 39.2503 32.8459 40.335 30.2373C41.4198 27.6287 42 24.6788 42 21.4807C42 19.9912 41.8504 18.4786 41.5967 17.1039V17.104Z" fill="white"/>
+                    </svg>
+                </a>
+                <a href="#" class="social-link" aria-label="WhatsApp">
+                    <svg viewBox="0 0 42 42" fill="none" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 0C32.5978 2.45968e-05 42 9.40218 42 21C42 32.5978 32.5978 42 21 42C17.3425 42 13.904 41.0647 10.9092 39.4209L0 42L2.79688 31.4775C1.0183 28.394 0 24.8156 0 21C4.83237e-08 9.40217 9.40219 0 21 0ZM21 3.76074C11.4796 3.76074 3.76193 11.4786 3.76172 20.999C3.76172 24.6699 4.90835 28.0732 6.86426 30.8691L5.05664 37.0293L11.502 35.3877C14.0553 37.077 17.0841 38.1047 20.3447 38.2266L21 38.2383C30.5205 38.2383 38.2383 30.5196 38.2383 20.999C38.2381 11.4786 30.5204 3.76077 21 3.76074ZM15.2285 10.6367C15.4857 10.6157 15.7224 10.7647 15.832 10.998L18.2275 16.0791C18.3406 16.3193 18.2911 16.6052 18.1035 16.793L16.3174 18.5781C15.9313 18.9642 15.8182 19.5659 16.084 20.043C16.7355 21.2113 17.612 22.3367 18.627 23.3721C19.6624 24.3871 20.7876 25.264 21.9561 25.915C22.4332 26.181 23.0341 26.0678 23.4209 25.6816L25.2061 23.8965C25.3938 23.7087 25.6796 23.6588 25.9199 23.7725L31.001 26.167C31.2343 26.2767 31.3843 26.5138 31.3633 26.7705C31.3084 27.439 31.0396 28.7786 29.8389 29.9795C26.4487 33.3696 20.3609 29.5343 20.1123 29.3857C18.6149 28.5813 17.192 27.5049 15.8428 26.1562C14.4942 24.8077 13.4167 23.385 12.6123 21.8877C12.4636 21.6404 8.62833 15.5521 12.0186 12.1611C13.2196 10.96 14.56 10.6916 15.2285 10.6367Z" fill="white"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <div class="footer-right">
+            <div class="footer-col">
+                <div class="footer-col-title">CONTATO</div>
+                <div class="footer-contact-info">
+                    <a href="mailto:contato@fabricadeempresas.com.br" class="footer-link-orange">contato@fabricadeempresas.com.br</a>
+                    <a href="tel:+5511999999999" class="footer-link-orange">(11) 99999-9999</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <div class="footer-col-title">EXPLORE</div>
+                <div class="footer-explore-links">
+                    <a href="#secao-projetos" class="footer-link">Projetos</a>
+                    <a href="#secao-solucoes" class="footer-link">Soluções</a>
+                    <a href="#secao-sobre" class="footer-link">Sobre</a>
+                    <a href="#secao-contato" class="footer-link">Contato</a>
+                </div>
+                <div class="footer-address">
+                    Rua Dona Maria Rodrigues Ramos Qd 1A Lt 23 Casa 2
+                </div>
+            </div>
+        </div>
     </footer>
     
     <div class="custom-cursor" id="customCursor">COMO FUNCIONA</div>
@@ -2371,6 +2755,120 @@
                 });
             }
             
+            // Typewriter effect setup
+            const twElements = document.querySelectorAll('.typewriter-text');
+            twElements.forEach(el => {
+                const text = el.textContent.trim();
+                el.innerHTML = '';
+                let charIndex = 0;
+                
+                text.split(' ').forEach((word, wordIndex, wordsArray) => {
+                    const wordSpan = document.createElement('span');
+                    wordSpan.style.display = 'inline-block';
+                    wordSpan.style.whiteSpace = 'nowrap';
+                    
+                    word.split('').forEach((char) => {
+                        const span = document.createElement('span');
+                        span.className = 'tw-char';
+                        if (char === ' ') {
+                            span.innerHTML = '&nbsp;';
+                        } else {
+                            span.textContent = char;
+                        }
+                        span.style.animationDelay = `${charIndex * 0.03}s`;
+                        wordSpan.appendChild(span);
+                        charIndex++;
+                    });
+                    
+                    el.appendChild(wordSpan);
+                    
+                    if (wordIndex < wordsArray.length - 1) {
+                        const spaceSpan = document.createElement('span');
+                        spaceSpan.innerHTML = '&nbsp;';
+                        spaceSpan.style.display = 'inline-block';
+                        el.appendChild(spaceSpan);
+                    }
+                });
+            });
+
+            // Button Wave Text setup
+            const btnWaveTexts = document.querySelectorAll('.btn-wave-text');
+            btnWaveTexts.forEach(el => {
+                const text = el.textContent.trim();
+                el.innerHTML = '';
+                text.split('').forEach((char, i) => {
+                    const span = document.createElement('span');
+                    if (char === ' ') {
+                        span.innerHTML = '&nbsp;';
+                    } else {
+                        span.textContent = char;
+                    }
+                    span.style.transitionDelay = `${i * 0.02}s`;
+                    el.appendChild(span);
+                });
+            });
+
+            // Placeholder typing effect on hover
+            const formInputs = document.querySelectorAll('.form-input:not(select)');
+            formInputs.forEach(input => {
+                let originalText = input.getAttribute('placeholder') || '';
+                let typeInterval;
+                
+                input.addEventListener('mouseenter', () => {
+                    if (!originalText || input.value) return;
+                    clearInterval(typeInterval);
+                    
+                    let currentText = '';
+                    let index = 0;
+                    let mistakeMade = false;
+                    let mistakeIndex = Math.floor(originalText.length / 2);
+                    
+                    input.setAttribute('placeholder', '');
+                    
+                    typeInterval = setInterval(() => {
+                        if (index === mistakeIndex && !mistakeMade) {
+                            currentText += 'w';
+                            mistakeMade = true;
+                        } else if (mistakeMade && currentText.endsWith('w')) {
+                            currentText = currentText.slice(0, -1);
+                        } else if (index < originalText.length) {
+                            currentText += originalText[index];
+                            index++;
+                        }
+                        
+                        input.setAttribute('placeholder', currentText);
+                        
+                        if (index >= originalText.length && mistakeMade && !currentText.endsWith('w')) {
+                            clearInterval(typeInterval);
+                        }
+                    }, 80);
+                });
+                
+                input.addEventListener('mouseleave', () => {
+                    clearInterval(typeInterval);
+                    input.setAttribute('placeholder', originalText);
+                });
+            });
+
+            // Select Custom Overlay Logic
+            const serviceSelect = document.getElementById('service-select');
+            const overlayText = document.getElementById('select-overlay-text');
+            if (serviceSelect && overlayText) {
+                serviceSelect.addEventListener('change', () => {
+                    const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+                    const text = selectedOption.text;
+                    if (text.length > 1) {
+                        const firstChar = text[0];
+                        const middleText = text.slice(1, -1);
+                        const lastChar = text[text.length - 1];
+                        overlayText.innerHTML = `<span class="select-char-jump">${firstChar}</span>${middleText}<span class="select-char-jump">${lastChar}</span>`;
+                    } else {
+                        overlayText.textContent = text;
+                    }
+                    overlayText.parentElement.classList.add('has-value');
+                });
+            }
+
             // Scroll Fade Animations (Load/Unload elements via scroll)
             const fadeElements = document.querySelectorAll('.services-left-area, .services-list, .feature-content, .feature-image-placeholder, .about-title, .about-desc, .about-image-placeholder, .contact-title, .contact-subtitle, .contact-form, .contact-image-placeholder');
             
