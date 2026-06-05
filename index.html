@@ -1296,27 +1296,112 @@
             background-color: var(--color-bg);
             padding: 100px 40px; 
             display: flex;
-            flex-direction: column;
-            gap: 120px;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 40px;
             min-height: 100vh;
+        }
+
+        .about-left-col {
+            position: sticky;
+            top: 40vh;
+            width: 25%;
+            z-index: 30;
+        }
+
+        .about-right-col {
+            width: 75%;
+            display: flex;
+            flex-direction: column;
+            gap: 80px;
         }
 
         .about-main-title {
             position: relative;
             z-index: 20;
-            font-size: clamp(30px, 4vw, 45px);
+            font-size: clamp(34px, 4.5vw, 49px);
             font-weight: 600;
             color: var(--color-black);
             font-family: var(--font-scroll);
-            margin-bottom: -60px;
             text-transform: uppercase;
+            letter-spacing: 1.5px;
         }
+
+        .mouse-blur-circle {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            pointer-events: none;
+            z-index: 15;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* ── Specific Entrance Animations ── */
+        .anim-fade-up, .anim-blur-reveal, .anim-scale-in, .anim-slide-left, .anim-slide-right {
+            opacity: 0;
+            will-change: transform, opacity, filter;
+            transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .anim-fade-up {
+            transform: translateY(30px);
+        }
+        .anim-fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .anim-blur-reveal {
+            filter: blur(15px);
+            transform: scale(0.95);
+        }
+        .anim-blur-reveal.visible {
+            opacity: 1;
+            filter: blur(0);
+            transform: scale(1);
+        }
+
+        .anim-scale-in {
+            transform: scale(0.8);
+        }
+        .anim-scale-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .anim-slide-left {
+            transform: translateX(-50px);
+        }
+        .anim-slide-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .anim-slide-right {
+            transform: translateX(50px);
+        }
+        .anim-slide-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Delay modifiers */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
 
         .about-block {
             position: relative;
-            z-index: 20;
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: space-between;
             gap: 60px;
             flex-direction: row;
@@ -1335,6 +1420,8 @@
             padding: 0;
             text-align: left;
             align-items: flex-start;
+            position: relative;
+            z-index: 30;
         }
 
         .about-content.right-align {
@@ -1352,10 +1439,10 @@
         }
 
         .about-desc {
-            font-size: clamp(16px, 1.5vw, 22px);
-            font-weight: 400;
+            font-size: clamp(12px, 1.3vw, 18px);
+            font-weight: 300;
             color: var(--color-black);
-            font-family: var(--font-scroll);
+            font-family: var(--font-thin);
             line-height: 1.5;
         }
 
@@ -1375,6 +1462,16 @@
         @media (max-width: 900px) {
             .about-section {
                 padding: 60px 20px;
+                gap: 60px;
+                flex-direction: column;
+            }
+            .about-left-col {
+                position: relative;
+                top: 0;
+                width: 100%;
+            }
+            .about-right-col {
+                width: 100%;
                 gap: 60px;
             }
             .about-main-title {
@@ -2487,52 +2584,61 @@
     
     
     
-    
-    
     <section class="about-section" id="secao-sobre">
-        <h2 class="about-main-title">SOBRE</h2>
+        <div class="mouse-blur-circle" id="mouse-blur-circle"></div>
         
-        <!-- Block 1 -->
-        <div class="about-block">
-            <div class="about-content right-align">
-                <h3 class="about-title">NOSSA TRAJETÓRIA</h3>
-                <p class="about-desc">Forjados no automobilismo de alta performance. Campeões nacionais na F1 in Schools e competidores no mundial em Singapura. Hoje, aplicamos essa mesma precisão para estruturar negócios digitais.</p>
-            </div>
-            <div class="about-image-placeholder"></div>
+        <div class="about-left-col anim-blur-reveal">
+            <h2 class="about-main-title">
+                SOBRE A<br>
+                <span style="font-family: 'GT Proelium', sans-serif; font-weight: bold;">
+                    <span style="color: #212853">FÁBRICA</span> <span style="color: #ee731b">DE</span><br>
+                    <span style="color: #212853">EMPRESAS.</span>
+                </span>
+            </h2>
         </div>
-
-        <!-- Block 2 -->
-        <div class="about-block reverse">
-            <div class="about-content">
-                <h3 class="about-title">MISSÃO E VISÃO</h3>
-                <p class="about-desc">Com base na Engenharia, tratamos o digital como infraestrutura, não como arte. Nosso foco é construir máquinas de conversão sólidas, autônomas e altamente escaláveis.</p>
-            </div>
-            <div class="about-image-placeholder"></div>
-        </div>
-
         
-        <!-- Block 3 -->
-        <div class="about-block">
-            <div class="about-content right-align">
-                <h3 class="about-title">LIDERANÇA</h3>
-                <p class="about-desc">Guilherme e Gustavo unem o raciocínio lógico da engenharia à visão prática de negócios. Não somos apenas desenvolvedores; somos projetistas de soluções orientados a dados.</p>
+        <div class="about-right-col">
+            <!-- Block 1 -->
+            <div class="about-block">
+                <div class="about-content right-align">
+                    <h3 class="about-title anim-fade-up">NOSSA TRAJETÓRIA</h3>
+                    <p class="about-desc anim-fade-up delay-100">Forjados no automobilismo de alta performance. Campeões nacionais na F1 in Schools e competidores no mundial em Singapura. Hoje, aplicamos essa mesma precisão para estruturar negócios digitais.</p>
+                </div>
+                <div class="about-image-placeholder anim-scale-in delay-200"></div>
             </div>
-            <div class="about-image-placeholder"></div>
-        </div>
 
-        <!-- Block 4 -->
-        <div class="about-block reverse">
-            <div class="about-content">
-                <h3 class="about-title">METODOLOGIA</h3>
-                <p class="about-desc">Uma linha de produção rigorosa: mapeamento do problema, design estrutural, código e testes de estresse. Metodologia validada para entregas impecáveis e com performance máxima.</p>
+            <!-- Block 2 -->
+            <div class="about-block reverse">
+                <div class="about-content">
+                    <h3 class="about-title anim-slide-left">MISSÃO E VISÃO</h3>
+                    <p class="about-desc anim-slide-left delay-100">Com base na Engenharia, tratamos o digital como infraestrutura, não como arte. Nosso foco é construir máquinas de conversão sólidas, autônomas e altamente escaláveis.</p>
+                </div>
+                <div class="about-image-placeholder anim-scale-in delay-200"></div>
             </div>
-            <div class="about-image-placeholder"></div>
-        </div>
 
-        <div class="scroll-indicator" style="align-self: flex-end; margin-top: -60px; position: relative; right: 40px;" aria-label="Role para baixo">
-            <span class="scroll-label vertical-wave-text">DESÇA</span>
-            <div style="overflow: hidden; width: 2px; height: 60px;">
-                <div class="scroll-line" style="height: 100%;"></div>
+            <!-- Block 3 -->
+            <div class="about-block">
+                <div class="about-content right-align">
+                    <h3 class="about-title anim-fade-up">LIDERANÇA</h3>
+                    <p class="about-desc anim-fade-up delay-100">Guilherme e Gustavo unem o raciocínio lógico da engenharia à visão prática de negócios. Não somos apenas desenvolvedores; somos projetistas de soluções orientados a dados.</p>
+                </div>
+                <div class="about-image-placeholder anim-scale-in delay-200"></div>
+            </div>
+
+            <!-- Block 4 -->
+            <div class="about-block reverse">
+                <div class="about-content">
+                    <h3 class="about-title anim-slide-right">METODOLOGIA</h3>
+                    <p class="about-desc anim-slide-right delay-100">Uma linha de produção rigorosa: mapeamento do problema, design estrutural, código e testes de estresse. Metodologia validada para entregas impecáveis e com performance máxima.</p>
+                </div>
+                <div class="about-image-placeholder anim-scale-in delay-200"></div>
+            </div>
+
+            <div class="scroll-indicator" style="align-self: flex-end; margin-top: -60px; position: relative; right: 40px;" aria-label="Role para baixo">
+                <span class="scroll-label vertical-wave-text">DESÇA</span>
+                <div style="overflow: hidden; width: 2px; height: 60px;">
+                    <div class="scroll-line" style="height: 100%;"></div>
+                </div>
             </div>
         </div>
     </section>
@@ -2869,8 +2975,68 @@
                 });
             }
 
+            // Mouse blur circle logic (lerp for smooth trail)
+            const blurCircle = document.getElementById('mouse-blur-circle');
+            const aboutSection = document.getElementById('secao-sobre');
+            
+            if (blurCircle && aboutSection) {
+                let mouseX = window.innerWidth / 2;
+                let mouseY = window.innerHeight / 2;
+                let circleX = mouseX;
+                let circleY = mouseY;
+                let isHovering = false;
+
+                aboutSection.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                });
+                
+                aboutSection.addEventListener('mouseleave', () => {
+                    blurCircle.style.opacity = '0';
+                    isHovering = false;
+                });
+                
+                aboutSection.addEventListener('mouseenter', () => {
+                    blurCircle.style.opacity = '1';
+                    isHovering = true;
+                });
+
+                function animateCircle() {
+                    if (isHovering) {
+                        circleX += (mouseX - circleX) * 0.12;
+                        circleY += (mouseY - circleY) * 0.12;
+                        blurCircle.style.left = circleX + 'px';
+                        blurCircle.style.top = circleY + 'px';
+                    }
+                    requestAnimationFrame(animateCircle);
+                }
+                animateCircle();
+            }
+
+            // Magnetic effect for about images
+            const aboutImages = document.querySelectorAll('.about-image-placeholder');
+            aboutImages.forEach(img => {
+                img.addEventListener('mousemove', (e) => {
+                    const rect = img.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const moveX = (x - centerX) / 8;
+                    const moveY = (y - centerY) / 8;
+                    
+                    img.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.02)`;
+                });
+                
+                img.addEventListener('mouseleave', () => {
+                    img.style.transform = `translate(0px, 0px) scale(1)`;
+                });
+            });
+
             // Scroll Fade Animations (Load/Unload elements via scroll)
-            const fadeElements = document.querySelectorAll('.services-left-area, .services-list, .feature-content, .feature-image-placeholder, .about-title, .about-desc, .about-image-placeholder, .contact-title, .contact-subtitle, .contact-form, .contact-image-placeholder');
+            const fadeElements = document.querySelectorAll('.services-left-area, .services-list, .feature-content, .feature-image-placeholder, .contact-title, .contact-subtitle, .contact-form, .contact-image-placeholder');
             
             fadeElements.forEach(el => {
                 el.classList.add('scroll-fade-in');
@@ -2885,9 +3051,14 @@
                         entry.target.classList.remove('visible');
                     }
                 });
-            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-            fadeElements.forEach(el => scrollObserver.observe(el));
+            }, {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            });
+            
+            // Observando todos os elementos com animações
+            const animatedElements = document.querySelectorAll('.scroll-fade-in, .anim-fade-up, .anim-blur-reveal, .anim-scale-in, .anim-slide-left, .anim-slide-right');
+            animatedElements.forEach(el => scrollObserver.observe(el));
 
             // Hover and Accordion Logic for Services
             const srvItems = document.querySelectorAll('.service-item');
