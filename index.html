@@ -916,7 +916,7 @@
             .services-section {
                 flex-direction: column;
                 padding: 60px 20px;
-                gap: 60px;
+                gap: 0;
             }
             .services-hover-images {
                 display: none;
@@ -927,6 +927,15 @@
             .services-list {
                 max-width: 100%;
                 margin-top: 0;
+                gap: 0;
+            }
+            .service-item {
+                border-bottom: 1px solid rgba(0,0,0,0.1);
+                padding: 18px 0;
+                gap: 0;
+            }
+            .service-name {
+                font-size: clamp(15px, 4.5vw, 22px);
             }
         }
 
@@ -1216,57 +1225,58 @@
             width: 100%;
         }
 
+        .exp-tabs-mobile {
+            display: none;
+        }
+        
         @media (max-width: 1024px) {
             .experience-scroll-container {
                 height: auto;
+                min-height: unset;
+                padding-top: 0;
                 background-color: var(--color-bg);
             }
             .experience-sticky {
-                position: relative;
-                height: auto;
-                min-height: unset;
-                padding: 60px 20px;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 40px;
+                display: none !important;
             }
-            #exp-bg-1, #exp-bg-2, #exp-bg-3 {
-                position: relative !important;
-                clip-path: none !important;
-                transform: none !important;
-                font-size: clamp(50px, 12vw, 80px);
-            }
-            #exp-info-1, #exp-info-2, #exp-info-3 {
-                position: relative !important;
-                clip-path: none !important;
-                transform: none !important;
-                opacity: 1 !important;
-                pointer-events: auto !important;
-                bottom: auto !important;
-                margin-bottom: 30px;
-            }
-            .experience-content {
+            .exp-tabs-mobile {
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                padding: 80px 20px;
-                text-align: center;
-            }
-            .experience-title {
-                position: static;
-                margin-bottom: 60px;
-                align-self: flex-start;
-            }
-            .experience-image-placeholder {
+                gap: 40px;
+                padding: 60px 20px;
                 position: relative;
-                top: auto;
-                left: auto;
-                transform: rotate(-55deg);
-                margin: 0 auto 60px;
-                width: 90%;
-                height: 200px;
+                z-index: 10;
             }
+            .exp-tab-item {
+                border-bottom: 2px solid rgba(0,0,0,0.1);
+                padding-bottom: 30px;
+            }
+            .exp-tab-item:last-child {
+                border-bottom: none;
+            }
+            .exp-tab-header {
+                display: flex;
+                align-items: baseline;
+                gap: 20px;
+                margin-bottom: 20px;
+            }
+            .exp-tab-header h2 {
+                font-family: var(--font-heading);
+                font-size: clamp(40px, 8vw, 60px);
+                color: var(--color-orange);
+            }
+            .exp-tab-header h3 {
+                font-family: var(--font-heading);
+                font-size: clamp(24px, 5vw, 32px);
+                color: var(--color-blue);
+            }
+            .exp-tab-content p {
+                font-family: var(--font-scroll);
+                font-size: clamp(14px, 4vw, 16px);
+                color: var(--color-black);
+                line-height: 1.5;
+            }
+        }
             .experience-image-placeholder:hover {
                 transform: rotate(-10deg) scale(1.02);
             }
@@ -2639,6 +2649,37 @@
                 <span class="scroll-label vertical-wave-text">DESÇA</span>
                 <div style="overflow: hidden; width: 2px; height: 60px;">
                     <div class="scroll-line" style="height: 100%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Tabs Interface -->
+        <div class="exp-tabs-mobile">
+            <div class="exp-tab-item">
+                <div class="exp-tab-header">
+                    <h2>01</h2>
+                    <h3>ROBÓTICA</h3>
+                </div>
+                <div class="exp-tab-content">
+                    <p>Campeões nacionais da F1 in Schools e premiados no mundial em Singapura. Uma base forjada na precisão e alta performance das competições de robótica.</p>
+                </div>
+            </div>
+            <div class="exp-tab-item">
+                <div class="exp-tab-header">
+                    <h2>02</h2>
+                    <h3>NEGÓCIOS</h3>
+                </div>
+                <div class="exp-tab-content">
+                    <p>Lideramos operações reais em tecnologia, IA e seguros. Sabemos exatamente o que o seu projeto precisa porque estruturamos e escalamos negócios na prática.</p>
+                </div>
+            </div>
+            <div class="exp-tab-item">
+                <div class="exp-tab-header">
+                    <h2>03</h2>
+                    <h3>FORMAÇÃO</h3>
+                </div>
+                <div class="exp-tab-content">
+                    <p>Integrantes e mentores nas melhores iniciativas do país (Insper, USP, Inteli e Fundação Estudar). A inovação de ponta faz parte do nosso DNA.</p>
                 </div>
             </div>
         </div>
