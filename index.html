@@ -21,8 +21,7 @@
             --font-thin: 'Inter', -apple-system, Roboto, Helvetica, sans-serif;
         }
 
-        html, body {
-            height: 100%;
+        html {
             scrollbar-width: none; /* Firefox */
             -ms-overflow-style: none;  /* IE and Edge */
             scroll-behavior: smooth;
@@ -36,7 +35,8 @@
             background: var(--color-bg);
             font-family: var(--font-heading);
             position: relative;
-            overflow-x: hidden; /* Prevent horizontal scroll from bleeding elements */
+            overflow-x: hidden;
+            width: 100%;
         }
 
         .hero-wrapper {
@@ -367,7 +367,15 @@
             display: flex;
             flex-direction: column;
             gap: 0;
-            transform: translate(-20px, 40px); /* Move mais para o canto inferior esquerdo, mas com margem */
+        }
+
+        @media (max-width: 768px) {
+            .hero-text {
+                transform: none;
+            }
+            .spline-container {
+                display: none;
+            }
         }
 
         .hero-tagline {
@@ -465,7 +473,7 @@
 
             .hero-tagline,
             .hero-subtitle {
-                font-size: 24px;
+                font-size: 20px;
             }
         }
 
@@ -712,6 +720,12 @@
                 align-items: flex-start;
                 margin-top: 20px;
             }
+            .menu-links {
+                padding-left: 20px;
+            }
+            .menu-links a {
+                font-size: clamp(36px, 10vw, 56px);
+            }
             .menu-info {
                 align-items: flex-start;
                 text-align: left;
@@ -901,8 +915,18 @@
         @media (max-width: 900px) {
             .services-section {
                 flex-direction: column;
-                padding: 80px 20px;
-                gap: 40px;
+                padding: 60px 20px;
+                gap: 60px;
+            }
+            .services-hover-images {
+                display: none;
+            }
+            .services-left-area {
+                display: none;
+            }
+            .services-list {
+                max-width: 100%;
+                margin-top: 0;
             }
         }
 
@@ -1009,10 +1033,10 @@
             .services-details-section {
                 grid-template-columns: 1fr;
                 padding: 60px 20px;
-                gap: 80px;
+                gap: 60px;
             }
             .feature-col {
-                gap: 80px;
+                gap: 60px;
             }
             .col-right {
                 margin-top: 0;
@@ -1193,6 +1217,34 @@
         }
 
         @media (max-width: 900px) {
+            .experience-scroll-container {
+                height: auto;
+                background-color: var(--color-bg);
+            }
+            .experience-sticky {
+                position: relative;
+                height: auto;
+                min-height: unset;
+                padding: 60px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 40px;
+            }
+            #exp-bg-1, #exp-bg-2, #exp-bg-3 {
+                position: relative !important;
+                clip-path: none !important;
+                transform: none !important;
+                font-size: clamp(50px, 12vw, 80px);
+            }
+            #exp-info-1, #exp-info-2, #exp-info-3 {
+                position: relative !important;
+                clip-path: none !important;
+                transform: none !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+                bottom: auto !important;
+                margin-bottom: 30px;
+            }
             .experience-content {
                 display: flex;
                 flex-direction: column;
@@ -1457,6 +1509,20 @@
         
         .about-image-placeholder:hover {
             transform: scale(1.02);
+        }
+
+        @media (max-width: 1024px) {
+            .about-left-col {
+                position: relative;
+                top: 0;
+                width: 100%;
+            }
+            .about-right-col {
+                width: 100%;
+            }
+            .about-section {
+                flex-direction: column;
+            }
         }
 
         @media (max-width: 900px) {
@@ -1762,6 +1828,7 @@
             .contact-section {
                 flex-direction: column;
                 padding: 60px 20px;
+                gap: 60px;
             }
             .contact-content {
                 max-width: 100%;
@@ -1891,12 +1958,12 @@
         @media (max-width: 768px) {
             .site-footer {
                 flex-direction: column;
-                padding: 60px 30px;
+                padding: 60px 20px;
                 gap: 60px;
             }
             .footer-right {
                 flex-direction: column;
-                gap: 50px;
+                gap: 60px;
                 margin-right: 0;
             }
         }
@@ -1906,24 +1973,6 @@
             font-size: clamp(12px, 1vw, 14px);
             opacity: 0.7;
             letter-spacing: 0.05em;
-        }
-
-        /* ── Scroll Snapping ── */
-        html {
-            scroll-snap-type: y proximity;
-        }
-
-        .hero-wrapper,
-        .services-section,
-        .services-details-section,
-        .video-section,
-        .about-section,
-        .contact-section {
-            scroll-snap-align: center;
-        }
-
-        .experience-scroll-container {
-            scroll-snap-align: start;
         }
 
         /* ── Custom Cursor ── */
@@ -2019,8 +2068,6 @@
         }
     
     </style>
-    <!-- Script do Spline Viewer -->
-    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.54/build/spline-viewer.js"></script>
 </head>
 <body id="top">
 
@@ -2165,6 +2212,7 @@
             }
 
             // Custom Cursor Logic
+            if (window.matchMedia('(pointer: fine)').matches) {
             const cursor = document.getElementById('customCursor');
             const serviceImages = document.querySelectorAll('.services-details-section .feature-image-placeholder');
             const videoPlaceholders = document.querySelectorAll('.video-placeholder');
@@ -2173,11 +2221,17 @@
             const heroSoundBtn = document.getElementById('heroSoundBtn');
             let soundEnabled = false;
 
-            // Inicia o áudio
-            const bgMusic = new Audio('musica.mp3');
-            bgMusic.volume = 0.02;
-            bgMusic.playbackRate = 0.7;
-            bgMusic.loop = true;
+            // Variável global para o áudio, instanciada apenas sob demanda
+            let bgMusic = null;
+            const playAudio = () => {
+                if (!bgMusic) {
+                    bgMusic = new Audio('musica.mp3');
+                    bgMusic.volume = 0.02;
+                    bgMusic.playbackRate = 0.7;
+                    bgMusic.loop = true;
+                }
+                bgMusic.play().catch(err => console.error("Erro ao tocar áudio:", err));
+            };
 
             if(cursor) {
                 // Remove conteúdo apenas após a transição CSS terminar
@@ -2202,7 +2256,7 @@
                         e.stopPropagation();
                         if (!soundEnabled) {
                             soundEnabled = true;
-                            bgMusic.play().catch(err => console.error("Erro ao tocar áudio:", err));
+                            playAudio();
                             cursor.classList.remove('active');
                             cleanupCursor();
                             if (muteBtn) muteBtn.style.display = 'flex';
@@ -2227,7 +2281,7 @@
                     heroWrapper.addEventListener('click', () => {
                         if (!soundEnabled) {
                             soundEnabled = true;
-                            bgMusic.play().catch(err => console.error("Erro ao tocar áudio:", err));
+                            playAudio();
                             cursor.classList.remove('active');
                             cleanupCursor();
                             if (muteBtn) muteBtn.style.display = 'flex';
@@ -2241,18 +2295,25 @@
                         e.stopPropagation();
                         soundEnabled = false;
                         muteBtn.style.display = 'none';
-                        bgMusic.pause();
+                        if (bgMusic) bgMusic.pause();
                         if (heroSoundBtn) heroSoundBtn.style.display = 'flex';
                     });
                 }
 
                 const scrollProgressBar = document.getElementById('scrollProgressBar');
+                let scrollProgressTicking = false;
                 window.addEventListener('scroll', () => {
-                    const scrollPx = document.documentElement.scrollTop || document.body.scrollTop;
-                    const winHeightPx = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                    const scrolled = `${(scrollPx / winHeightPx) * 100}%`;
-                    if(scrollProgressBar) {
-                        scrollProgressBar.style.height = scrolled;
+                    if (!scrollProgressTicking) {
+                        window.requestAnimationFrame(() => {
+                            const scrollPx = document.documentElement.scrollTop || document.body.scrollTop;
+                            const winHeightPx = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                            const scrolled = `${(scrollPx / winHeightPx) * 100}%`;
+                            if(scrollProgressBar) {
+                                scrollProgressBar.style.height = scrolled;
+                            }
+                            scrollProgressTicking = false;
+                        });
+                        scrollProgressTicking = true;
                     }
                 });
 
@@ -2286,25 +2347,32 @@
                     });
                 });
             }
+            }
 
             const viewer = document.getElementById("my-spline");
-            const baseUrl = "https://prod.spline.design/5dwVYLACMauo6Eyk/scene.splinecode";
-            
-            // Força um timestamp sempre novo na URL para o navegador não usar o cache
-            viewer.setAttribute("url", baseUrl + "?t=" + new Date().getTime());
+            if (window.innerWidth > 768) {
+                const splineScript = document.createElement('script');
+                splineScript.type = 'module';
+                splineScript.src = 'https://unpkg.com/@splinetool/viewer@1.9.54/build/spline-viewer.js';
+                document.head.appendChild(splineScript);
 
-            // Tentativa adicional de ocultar injetando CSS direto no Shadow DOM da logo
-            const hideInterval = setInterval(() => {
-                if (viewer.shadowRoot && viewer.shadowRoot.querySelector("#logo")) {
-                    const style = document.createElement("style");
-                    style.innerHTML = "#logo { display: none !important; opacity: 0 !important; visibility: hidden !important; }";
-                    viewer.shadowRoot.appendChild(style);
-                    clearInterval(hideInterval);
+                if (viewer) {
+                    const baseUrl = "https://prod.spline.design/5dwVYLACMauo6Eyk/scene.splinecode";
+                    viewer.setAttribute("url", baseUrl + "?t=" + new Date().getTime());
+                    
+                    const hideInterval = setInterval(() => {
+                        if (viewer.shadowRoot && viewer.shadowRoot.querySelector("#logo")) {
+                            const style = document.createElement("style");
+                            style.innerHTML = "#logo { display: none !important; opacity: 0 !important; visibility: hidden !important; }";
+                            viewer.shadowRoot.appendChild(style);
+                            clearInterval(hideInterval);
+                        }
+                    }, 100);
+                    setTimeout(() => clearInterval(hideInterval), 5000);
                 }
-            }, 100);
-            
-            // Para garantir que o intervalo pare caso o logo nunca seja achado
-            setTimeout(() => clearInterval(hideInterval), 5000);
+            } else {
+                if(viewer) viewer.remove();
+            }
         });
     </script>
 
@@ -2649,15 +2717,15 @@
             <h2 class="contact-title typewriter-text">VAMOS CONVERSAR</h2>
             <p class="contact-subtitle typewriter-text">Vamos construir juntos o seu negócio.</p>
             
-            <form class="contact-form" onsubmit="event.preventDefault();">
+            <form class="contact-form" id="contactForm" onsubmit="sendWhatsApp(event)">
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Nome</label>
-                        <input type="text" class="form-input" placeholder="Ex: João da Silva" required>
+                        <input type="text" id="formNome" class="form-input" placeholder="Ex: João da Silva" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-input" placeholder="seu@email.com" required>
+                        <input type="email" id="formEmail" class="form-input" placeholder="seu@email.com" required>
                     </div>
                 </div>
                 <div class="form-row">
@@ -2666,11 +2734,11 @@
                         <div class="select-wrapper">
                             <select class="form-input" required id="service-select">
                                 <option value="" disabled selected hidden>Escolha um serviço</option>
-                                <option value="sites">Sites Completos</option>
-                                <option value="landing">Landing Pages</option>
-                                <option value="automacoes">Automações</option>
-                                <option value="agentes">Agentes com IA</option>
-                                <option value="consultoria">Consultoria em IA</option>
+                                <option value="Sites Completos">Sites Completos</option>
+                                <option value="Landing Pages">Landing Pages</option>
+                                <option value="Automações">Automações</option>
+                                <option value="Agentes com IA">Agentes com IA</option>
+                                <option value="Consultoria em IA">Consultoria em IA</option>
                             </select>
                             <div class="select-overlay">
                                 <div class="select-text" id="select-overlay-text">
@@ -2682,12 +2750,27 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">WhatsApp / Telefone</label>
-                        <input type="tel" class="form-input" placeholder="(11) 99999-9999" required>
+                        <input type="tel" id="formTelefone" class="form-input" placeholder="(11) 99999-9999" required>
                     </div>
                 </div>
                 
                 <button type="submit" class="submit-btn"><span class="btn-wave-text">Enviar mensagem</span></button>
             </form>
+            
+            <script>
+                function sendWhatsApp(e) {
+                    e.preventDefault();
+                    const nome = document.getElementById('formNome').value;
+                    const email = document.getElementById('formEmail').value;
+                    const telefone = document.getElementById('formTelefone').value;
+                    const servico = document.getElementById('service-select').value;
+                    
+                    const numeroTelefone = "5511999999999";
+                    const mensagem = `Olá, me chamo ${nome}. Tenho interesse em ${servico || 'seus serviços'}. Meu email é ${email} e meu WhatsApp é ${telefone}.`;
+                    
+                    window.open(`https://wa.me/${numeroTelefone}?text=${encodeURIComponent(mensagem)}`, '_blank');
+                }
+            </script>
         </div>
         
         <div class="contact-image-placeholder"></div>
@@ -2770,82 +2853,103 @@
 
             if(menuBtn && menuOverlay) {
                 menuBtn.addEventListener('click', () => {
+                    const isOpening = !menuOverlay.classList.contains('active');
+                    if (isOpening) {
+                        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+                        if (scrollbarWidth > 0) {
+                            document.body.style.paddingRight = `${scrollbarWidth}px`;
+                            const header = document.querySelector('.site-header');
+                            if (header) {
+                                const currentPadding = parseInt(window.getComputedStyle(header).paddingRight || '0');
+                                header.style.paddingRight = `${currentPadding + scrollbarWidth}px`;
+                            }
+                        }
+                        document.body.style.overflow = 'hidden'; // prevent scrolling underneath
+                    } else {
+                        document.body.style.paddingRight = '';
+                        const header = document.querySelector('.site-header');
+                        if (header) header.style.paddingRight = '';
+                        document.body.style.overflow = '';
+                    }
                     menuOverlay.classList.toggle('active');
                     menuBtn.classList.toggle('open');
                     document.body.classList.toggle('menu-open');
-                    
-                    if (menuOverlay.classList.contains('active')) {
-                        document.body.style.overflow = 'hidden'; // prevent scrolling underneath
-                    } else {
-                        document.body.style.overflow = '';
-                    }
                 });
             }
         
             // Experience Scrolljacking Logic
             const expContainer = document.querySelector('.experience-scroll-container');
             if (expContainer) {
+                let scrollExpTicking = false;
                 window.addEventListener('scroll', () => {
-                    const rect = expContainer.getBoundingClientRect();
-                    const windowHeight = window.innerHeight;
+                    if (window.innerWidth <= 900) return;
                     
-                    let progress = 0;
-                    if (rect.top <= 0) {
-                        progress = Math.abs(rect.top) / (rect.height - windowHeight);
-                    }
-                    progress = Math.max(0, Math.min(1, progress));
-
-                    // Handle Main Image Full Open/Close Animation
-                    const mainImg = document.getElementById('exp-main-img');
-                    if (mainImg) {
-                        // Expand only during the active parts of each section, retract in the gaps
-                        const isExpanded = 
-                            (progress >= 0.05 && progress <= 0.28) || 
-                            (progress >= 0.38 && progress <= 0.61) || 
-                            (progress >= 0.71 && progress <= 0.95);
+                    if (!scrollExpTicking) {
+                        window.requestAnimationFrame(() => {
+                            const rect = expContainer.getBoundingClientRect();
+                            const windowHeight = window.innerHeight;
                             
-                        if (isExpanded) {
-                            mainImg.style.opacity = '1';
-                            mainImg.style.transform = 'translate(-60%, -50%) rotate(-55deg) translateY(0%) scaleY(1) scaleX(1)';
-                        } else {
-                            mainImg.style.opacity = '0.15';
-                            mainImg.style.transform = 'translate(-60%, -50%) rotate(-55deg) translateY(50%) scaleY(0.01) scaleX(1)';
-                        }
-                    }
-
-                    let activeIndex = 1;
-                    if (progress >= 0.33 && progress < 0.66) {
-                        activeIndex = 2;
-                    } else if (progress >= 0.66) {
-                        activeIndex = 3;
-                    }
-
-                    for(let i = 1; i <= 3; i++) {
-                        const bg = document.getElementById(`exp-bg-${i}`);
-                        const info = document.getElementById(`exp-info-${i}`);
-                        
-                        const isActive = (i === activeIndex);
-                        
-                        if (bg) {
-                            if (isActive) {
-                                bg.style.clipPath = 'polygon(-20% -50%, 120% -50%, 120% 150%, -20% 150%)';
-                                bg.style.transform = 'translate(-50%, -50%)';
-                            } else {
-                                bg.style.clipPath = 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)';
-                                bg.style.transform = 'translate(-50%, 50%)';
+                            let progress = 0;
+                            if (rect.top <= 0) {
+                                progress = Math.abs(rect.top) / (rect.height - windowHeight);
                             }
-                        }
-                        if (info) {
-                            if (isActive) {
-                                info.style.clipPath = 'polygon(-20% -20%, 120% -20%, 120% 120%, -20% 120%)';
-                                info.style.transform = 'translateY(0)';
-                            } else {
-                                info.style.clipPath = 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)';
-                                info.style.transform = 'translateY(40px)';
+                            progress = Math.max(0, Math.min(1, progress));
+
+                            // Handle Main Image Full Open/Close Animation
+                            const mainImg = document.getElementById('exp-main-img');
+                            if (mainImg) {
+                                // Expand only during the active parts of each section, retract in the gaps
+                                const isExpanded = 
+                                    (progress >= 0.05 && progress <= 0.28) || 
+                                    (progress >= 0.38 && progress <= 0.61) || 
+                                    (progress >= 0.71 && progress <= 0.95);
+                                    
+                                if (isExpanded) {
+                                    mainImg.style.opacity = '1';
+                                    mainImg.style.transform = 'translate(-60%, -50%) rotate(-55deg) translateY(0%) scaleY(1) scaleX(1)';
+                                } else {
+                                    mainImg.style.opacity = '0.15';
+                                    mainImg.style.transform = 'translate(-60%, -50%) rotate(-55deg) translateY(50%) scaleY(0.01) scaleX(1)';
+                                }
                             }
-                            info.style.opacity = '1'; // Never fade, pure mask
-                            info.style.pointerEvents = isActive ? 'auto' : 'none';
-                        }
+
+                            let activeIndex = 1;
+                            if (progress >= 0.33 && progress < 0.66) {
+                                activeIndex = 2;
+                            } else if (progress >= 0.66) {
+                                activeIndex = 3;
+                            }
+
+                            for(let i = 1; i <= 3; i++) {
+                                const bg = document.getElementById(`exp-bg-${i}`);
+                                const info = document.getElementById(`exp-info-${i}`);
+                                
+                                const isActive = (i === activeIndex);
+                                
+                                if (bg) {
+                                    if (isActive) {
+                                        bg.style.clipPath = 'polygon(-20% -50%, 120% -50%, 120% 150%, -20% 150%)';
+                                        bg.style.transform = 'translate(-50%, -50%)';
+                                    } else {
+                                        bg.style.clipPath = 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)';
+                                        bg.style.transform = 'translate(-50%, 50%)';
+                                    }
+                                }
+                                if (info) {
+                                    if (isActive) {
+                                        info.style.clipPath = 'polygon(-20% -20%, 120% -20%, 120% 120%, -20% 120%)';
+                                        info.style.transform = 'translateY(0)';
+                                    } else {
+                                        info.style.clipPath = 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)';
+                                        info.style.transform = 'translateY(40px)';
+                                    }
+                                    info.style.opacity = '1'; // Never fade, pure mask
+                                    info.style.pointerEvents = isActive ? 'auto' : 'none';
+                                }
+                            }
+                            scrollExpTicking = false;
+                        });
+                        scrollExpTicking = true;
                     }
                 });
             }
@@ -2853,10 +2957,17 @@
             // Experience Title Entrance
             const expTitle = document.getElementById('exp-main-title');
             if (expContainer && expTitle) {
+                let scrollTitleTicking = false;
                 window.addEventListener('scroll', () => {
-                    const rect = expContainer.getBoundingClientRect();
-                    if (rect.top < window.innerHeight * 0.8) {
-                        expTitle.classList.add('visible');
+                    if (!scrollTitleTicking) {
+                        window.requestAnimationFrame(() => {
+                            const rect = expContainer.getBoundingClientRect();
+                            if (rect.top < window.innerHeight * 0.8) {
+                                expTitle.classList.add('visible');
+                            }
+                            scrollTitleTicking = false;
+                        });
+                        scrollTitleTicking = true;
                     }
                 });
             }
@@ -3042,18 +3153,16 @@
                 el.classList.add('scroll-fade-in');
             });
 
-            const scrollObserver = new IntersectionObserver((entries) => {
+            const scrollObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
-                    } else {
-                        // Unload when scrolled out of view
-                        entry.target.classList.remove('visible');
+                        observer.unobserve(entry.target);
                     }
                 });
             }, {
-                threshold: 0.15,
-                rootMargin: "0px 0px -50px 0px"
+                threshold: 0.05,
+                rootMargin: "0px 0px 0px 0px"
             });
             
             // Observando todos os elementos com animações
@@ -3117,11 +3226,17 @@
             const overlay = document.getElementById('menuOverlay');
             const btn = document.querySelector('.menu-btn');
             if (!overlay) return;
+            overlay.classList.remove('active');
             overlay.classList.remove('open');
             document.body.classList.remove('menu-open');
+            document.body.style.paddingRight = '';
+            const header = document.querySelector('.site-header');
+            if (header) header.style.paddingRight = '';
+            document.body.style.overflow = '';
             if (btn) {
                 btn.setAttribute('aria-label', 'Abrir menu');
                 btn.classList.remove('is-open');
+                btn.classList.remove('open');
             }
         }
 
