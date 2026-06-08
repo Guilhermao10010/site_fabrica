@@ -2081,7 +2081,95 @@
             cursor: none;
         }
     
-    </style>
+    
+/* ── Fase 2: Hero Mobile Center — Garra + Nome ── */
+.hero-mobile-center {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .spline-container {
+        display: none !important;
+    }
+
+    .hero-mobile-center {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -54%);
+        z-index: 5;
+        pointer-events: none;
+        gap: 16px;
+    }
+
+    .hero-gear-svg {
+        width: clamp(200px, 62vw, 280px);
+        height: clamp(200px, 62vw, 280px);
+        filter: drop-shadow(0 8px 24px rgba(34, 40, 82, 0.10));
+    }
+
+    .gear-outer {
+        animation: gear-spin-slow 18s linear infinite;
+    }
+
+    .gear-rotate {
+        animation: gear-spin-slow 10s linear infinite reverse;
+    }
+
+    .gear-arm {
+        animation: gear-arm-pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes gear-spin-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes gear-arm-pulse {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 1; }
+    }
+
+    .hero-mobile-brand {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        line-height: 1;
+    }
+
+    .hero-brand-fabrica,
+    .hero-brand-de,
+    .hero-brand-empresas {
+        font-family: var(--font-heading);
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        display: block;
+        text-align: center;
+    }
+
+    .hero-brand-fabrica {
+        font-size: clamp(28px, 8vw, 40px);
+        color: var(--color-blue);
+    }
+
+    .hero-brand-de {
+        font-size: clamp(16px, 4.5vw, 22px);
+        color: var(--color-orange);
+        letter-spacing: 0.3em;
+    }
+
+    .hero-brand-empresas {
+        font-size: clamp(28px, 8vw, 40px);
+        color: var(--color-blue);
+    }
+}
+
+</style>
 </head>
 <body id="top">
 
@@ -2458,6 +2546,51 @@
     </header>
 
     <div class="hero-wrapper">
+
+        <!-- Visual central mobile: garra+nome da empresa -->
+        <div class="hero-mobile-center" aria-hidden="true">
+            <svg class="hero-gear-svg" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Garra/engrenagem industrial animada -->
+                <g class="gear-outer" transform-origin="160 160">
+                    <circle cx="160" cy="160" r="130" stroke="#222852" stroke-width="2.5" stroke-dasharray="8 6" fill="none" opacity="0.15" />
+                </g>
+                <g class="gear-rotate" transform-origin="160 160">
+                    <!-- Corpo da engrenagem -->
+                    <circle cx="160" cy="160" r="90" fill="#222852" opacity="0.06" />
+                    <circle cx="160" cy="160" r="90" stroke="#222852" stroke-width="1.5" fill="none" opacity="0.2" />
+                    <!-- Dentes da engrenagem -->
+                    <path d="M160 60 L167 78 L153 78 Z" fill="#222852" opacity="0.3" />
+                    <path d="M160 260 L167 242 L153 242 Z" fill="#222852" opacity="0.3" />
+                    <path d="M60 160 L78 167 L78 153 Z" fill="#222852" opacity="0.3" />
+                    <path d="M260 160 L242 167 L242 153 Z" fill="#222852" opacity="0.3" />
+                    <path d="M87 87 L100 102 L90 112 Z" fill="#222852" opacity="0.25" />
+                    <path d="M233 87 L220 102 L230 112 Z" fill="#222852" opacity="0.25" />
+                    <path d="M87 233 L100 218 L90 208 Z" fill="#222852" opacity="0.25" />
+                    <path d="M233 233 L220 218 L230 208 Z" fill="#222852" opacity="0.25" />
+                </g>
+                <!-- Braço / garra industrial -->
+                <g class="gear-arm" transform-origin="160 160">
+                    <line x1="160" y1="160" x2="160" y2="85" stroke="#EE731B" stroke-width="3" stroke-linecap="round" opacity="0.7" />
+                    <line x1="160" y1="160" x2="218" y2="205" stroke="#222852" stroke-width="3" stroke-linecap="round" opacity="0.5" />
+                    <line x1="160" y1="160" x2="102" y2="205" stroke="#222852" stroke-width="3" stroke-linecap="round" opacity="0.5" />
+                </g>
+                <!-- Hub central -->
+                <circle cx="160" cy="160" r="22" fill="#EE731B" opacity="0.9" />
+                <circle cx="160" cy="160" r="12" fill="#EFEFEE" />
+                <circle cx="160" cy="160" r="5" fill="#EE731B" />
+                <!-- Logo F mini -->
+                <text x="148" y="168" font-family="Oswald, sans-serif" font-size="18" font-weight="700" fill="#222852" opacity="0.9">F</text>
+                <!-- Linha decorativa industrial -->
+                <line x1="50" y1="160" x2="110" y2="160" stroke="#EE731B" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4" />
+                <line x1="210" y1="160" x2="270" y2="160" stroke="#EE731B" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4" />
+            </svg>
+            <div class="hero-mobile-brand">
+                <span class="hero-brand-fabrica">FÁBRICA</span>
+                <span class="hero-brand-de">DE</span>
+                <span class="hero-brand-empresas">EMPRESAS</span>
+            </div>
+        </div>
+
         <button id="heroSoundBtn" class="hero-sound-btn" aria-label="Ativar Som">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
