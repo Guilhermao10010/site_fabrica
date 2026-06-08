@@ -1236,8 +1236,8 @@
         
         @media (max-width: 1024px) {
             .experience-scroll-container {
-                height: auto;
-                min-height: unset;
+                height: auto !important;
+                min-height: unset !important;
                 padding-top: 0;
                 background-color: var(--color-bg);
             }
@@ -1281,7 +1281,6 @@
                 color: var(--color-black);
                 line-height: 1.5;
             }
-        }
             .experience-image-placeholder:hover {
                 transform: rotate(-10deg) scale(1.02);
             }
@@ -1298,6 +1297,8 @@
             }
         }
 
+
+        }
 
         /* ── Video Section ── */
         .video-section {
