@@ -2069,8 +2069,10 @@
             left: 0;
             width: 100%;
             z-index: 9999 !important;
-            background: transparent;
-            pointer-events: none; /* Let clicks pass through empty spaces */
+            background: var(--color-bg);
+            padding-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            pointer-events: auto;
         }
         .site-header > * {
             pointer-events: auto; /* Allow clicking logo and nav */
