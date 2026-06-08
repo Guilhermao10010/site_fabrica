@@ -1235,6 +1235,12 @@
         }
         
         @media (max-width: 1024px) {
+            .hero-wrapper {
+                background: transparent !important;
+            }
+            .site-main {
+                background: transparent !important;
+            }
             .experience-scroll-container {
                 height: auto !important;
                 min-height: unset !important;
@@ -1281,6 +1287,16 @@
                 color: var(--color-black);
                 line-height: 1.5;
             }
+            .nav-cta-text {
+                font-size: clamp(18px, 5vw, 24px) !important;
+            }
+            .menu-left-col a, .menu-left-col p {
+                font-size: clamp(16px, 4.5vw, 20px) !important;
+            }
+            .social-links svg {
+                width: 32px !important;
+                height: 32px !important;
+            }
             .experience-image-placeholder:hover {
                 transform: rotate(-10deg) scale(1.02);
             }
@@ -1305,7 +1321,7 @@
             position: relative;
             z-index: 10;
             background-color: var(--color-bg);
-            padding: 20px 40px; /* Reduced padding slightly to give video more space */
+            padding: 20px 5%; /* Small margin */
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -1315,8 +1331,8 @@
         .video-placeholder {
             position: relative;
             width: 100%;
-            height: calc(100vh - 40px); /* 100vh minus padding */
-            max-width: 1500px; /* Increased max-width */
+            height: 80vh;
+            max-width: 1400px;
             background-color: #D9D9D9;
             border-radius: 20px;
             display: flex;
@@ -1349,6 +1365,7 @@
         @media (max-width: 768px) {
             .video-section {
                 padding: 20px;
+                background-color: var(--color-bg);
             }
             .video-placeholder {
                 height: 60vh;
@@ -1717,7 +1734,8 @@
             -moz-appearance: none;
             background-image: none;
             outline: none;
-            color: transparent;
+            color: transparent !important;
+            text-shadow: none !important;
         }
 
         .select-wrapper {
@@ -2075,9 +2093,9 @@
             left: 0;
             width: 100%;
             z-index: 9999 !important;
-            background: var(--color-bg);
+            background: transparent !important;
             padding-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            box-shadow: none !important;
             pointer-events: auto;
         }
         .site-header > * {
@@ -2798,6 +2816,7 @@
 
         <!-- Mobile Tabs Interface -->
         <div class="exp-tabs-mobile">
+            <h2 style="font-family: var(--font-heading); font-size: clamp(40px, 10vw, 60px); color: var(--color-black); margin-bottom: 20px;">NOSSA EXPERIÊNCIA</h2>
             <div class="exp-tab-item">
                 <div class="exp-tab-header">
                     <h2>01</h2>
