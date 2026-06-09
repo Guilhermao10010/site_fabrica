@@ -864,9 +864,7 @@
             margin-top: 15px;
         }
 
-        .service-item:hover {
-            transform: translateX(10px);
-        }
+        
         
         .service-item:hover .service-icon svg {
             stroke: var(--color-orange);
@@ -982,10 +980,6 @@
             flex-direction: column;
             gap: 30px;
             width: 100%;
-            transition: transform 0.3s ease;
-        }
-        .feature-block:hover {
-            transform: translateY(-8px);
         }
 
         .feature-content {
@@ -1942,11 +1936,13 @@
         .social-link {
             color: #fff;
             opacity: 0.7;
-            transition: opacity 0.3s;
+            transition: all 0.3s ease;
+            display: inline-block;
         }
 
         .social-link:hover {
             opacity: 1;
+            transform: translateY(-5px);
         }
 
         .footer-right {
@@ -1985,11 +1981,13 @@
             font-family: var(--font-thin);
             font-size: 16px;
             opacity: 0.7;
-            transition: opacity 0.3s;
+            transition: all 0.3s ease;
+            display: inline-block;
         }
 
         .footer-link:hover {
             opacity: 1;
+            transform: translateX(5px);
         }
 
         .footer-link-orange {
@@ -1998,11 +1996,13 @@
             text-decoration: underline;
             text-underline-offset: 4px;
             font-family: var(--font-thin);
-            transition: opacity 0.3s;
+            transition: all 0.3s ease;
+            display: inline-block;
         }
 
         .footer-link-orange:hover {
             opacity: 0.8;
+            transform: translateX(5px);
         }
 
         .footer-address {
@@ -3358,7 +3358,7 @@
             });
 
             // Scroll Fade Animations (Load/Unload elements via scroll)
-            const fadeElements = document.querySelectorAll('.services-left-area, .services-list, .feature-content, .feature-image-placeholder, .contact-title, .contact-subtitle, .contact-form, .contact-image-placeholder');
+            const fadeElements = document.querySelectorAll('.services-left-area, .services-list, .feature-content, .feature-image-placeholder, .contact-title, .contact-subtitle, .contact-form, .contact-image-placeholder, .footer-left, .footer-col');
             
             fadeElements.forEach(el => {
                 el.classList.add('scroll-fade-in');
