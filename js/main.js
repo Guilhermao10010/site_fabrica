@@ -1,4 +1,4 @@
-
+﻿
         document.addEventListener("DOMContentLoaded", () => {
             // Animacao Wave
             const ctaText = document.querySelector('.nav-cta-text');
@@ -243,7 +243,7 @@
                     const telefone = document.getElementById('formTelefone').value;
                     const servico = document.getElementById('service-select').value;
                     
-                    const numeroTelefone = "5511999999999";
+                    const numeroTelefone = "5562998511232";
                     const mensagem = `Olá, me chamo ${nome}. Tenho interesse em ${servico || 'seus serviços'}. Meu email é ${email} e meu WhatsApp é ${telefone}.`;
                     
                     window.open(`https://wa.me/${numeroTelefone}?text=${encodeURIComponent(mensagem)}`, '_blank');
@@ -327,10 +327,10 @@
                             if (expImgSrc) {
                                 if (activeIndex === 1 && !expImgSrc.src.includes('imagem_robotica.webp')) {
                                     expImgSrc.src = 'assets/images/imagem_robotica.webp';
-                                } else if (activeIndex === 2 && !expImgSrc.src.includes('experience_main.webp')) {
-                                    expImgSrc.src = 'assets/images/experience_main.webp';
-                                } else if (activeIndex === 3 && !expImgSrc.src.includes('about_3.webp')) {
-                                    expImgSrc.src = 'assets/images/about_3.webp';
+                                } else if (activeIndex === 2 && !expImgSrc.src.includes('negocio_imagem.webp')) {
+                                    expImgSrc.src = 'assets/images/negocio_imagem.webp';
+                                } else if (activeIndex === 3 && !expImgSrc.src.includes('formacao_imagem.webp')) {
+                                    expImgSrc.src = 'assets/images/formacao_imagem.webp';
                                 }
                             }
 
@@ -768,3 +768,63 @@
             });
         });
     
+
+
+// L�gica para o v�deo principal tocar no hover
+const mainVideoPlaceholder = document.getElementById('main-video-placeholder');
+const mainHoverVideo = document.getElementById('main-hover-video');
+if (mainVideoPlaceholder && mainHoverVideo) {
+    mainVideoPlaceholder.addEventListener('mouseenter', () => {
+        if (mainHoverVideo.getAttribute('src') && mainHoverVideo.getAttribute('src').trim() !== '') {
+            mainHoverVideo.style.opacity = '1';
+            mainHoverVideo.play().catch(e => console.warn('Erro ao tocar v�deo:', e));
+        }
+    });
+    mainVideoPlaceholder.addEventListener('mouseleave', () => {
+        if (mainHoverVideo.getAttribute('src') && mainHoverVideo.getAttribute('src').trim() !== '') {
+            mainHoverVideo.style.opacity = '0';
+            mainHoverVideo.pause();
+        }
+    });
+}
+
+
+// Vimeo Logic
+const vimeoIframe = document.getElementById('main-vimeo-video');
+if (mainVideoPlaceholder && vimeoIframe && typeof Vimeo !== 'undefined') {
+    const player = new Vimeo.Player(vimeoIframe);
+    mainVideoPlaceholder.addEventListener('mouseenter', () => {
+        vimeoIframe.style.opacity = '1';
+        player.play().catch(e => console.warn('Erro ao tocar Vimeo:', e));
+    });
+    mainVideoPlaceholder.addEventListener('mouseleave', () => {
+        vimeoIframe.style.opacity = '0';
+        player.pause();
+    });
+}
+
+// Lógica do Modal de Vídeo
+const videoModal = document.getElementById('videoModal');
+const videoModalOverlay = document.getElementById('videoModalOverlay');
+const videoModalClose = document.getElementById('videoModalClose');
+const modalVimeoIframe = document.getElementById('modal-vimeo-video');
+
+if (mainVideoPlaceholder && videoModal && modalVimeoIframe && typeof Vimeo !== 'undefined') {
+    const bgPlayer = new Vimeo.Player(vimeoIframe);
+    const modalPlayer = new Vimeo.Player(modalVimeoIframe);
+
+    mainVideoPlaceholder.addEventListener('click', () => {
+        videoModal.classList.add('active');
+        bgPlayer.pause();
+        modalPlayer.play().catch(e => console.warn('Erro ao tocar Vimeo Modal:', e));
+    });
+
+    const closeModal = () => {
+        videoModal.classList.remove('active');
+        modalPlayer.pause();
+    };
+
+    videoModalClose.addEventListener('click', closeModal);
+    videoModalOverlay.addEventListener('click', closeModal);
+}
+

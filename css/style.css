@@ -1367,7 +1367,7 @@
             position: relative;
             z-index: 10;
             background-color: var(--color-bg);
-            padding: 20px 5%; /* Small margin */
+            /* padding removido para permitir expansão total */
             min-height: 100vh;
             width: 100%;
             display: flex;
@@ -1377,9 +1377,9 @@
 
         .video-placeholder {
             position: relative;
-            width: 100%;
-            height: 84vh;
-            max-width: 1470px;
+            width: calc(90% + 20px);
+            height: 92.4vh;
+            max-width: 1490px;
             margin: 0 auto;
             background-color: #D9D9D9;
             border-radius: 20px;
@@ -1387,7 +1387,15 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            /* box-shadow removed */
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: pointer;
+        }
+
+        .video-placeholder:hover {
+            width: 100%;
+            height: 100vh;
+            max-width: 100%;
+            border-radius: 0;
         }
 
         .video-btn {
@@ -2235,4 +2243,67 @@
     }
 }
 
+
+
+
+/* ── Video Modal (Lightbox) ── */
+.video-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.video-modal.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.video-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+}
+
+.video-modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    aspect-ratio: 16 / 9;
+    z-index: 2;
+}
+
+.video-modal-content iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.video-modal-close {
+    position: absolute;
+    top: -40px;
+    right: -10px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 35px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.video-modal-close:hover {
+    color: var(--color-orange);
+}
 
